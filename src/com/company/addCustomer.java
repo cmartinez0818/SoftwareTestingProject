@@ -432,7 +432,7 @@ public class addCustomer extends javax.swing.JInternalFrame {
         
     }//GEN-LAST:event_jButton1ActionPerformed
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+    public void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // TODO add your handling code here:
         
         String id = txtid.getText();
@@ -523,7 +523,7 @@ public class addCustomer extends javax.swing.JInternalFrame {
     private javax.swing.JRadioButton r2;
     private javax.swing.JTextArea txtaddress;
     private javax.swing.JTextField txtcontact;
-    private javax.swing.JTextField txtfirstname;
+    public javax.swing.JTextField txtfirstname;
     private javax.swing.JLabel txtid;
     private javax.swing.JTextField txtlastname;
     private javax.swing.JTextField txtnic;
