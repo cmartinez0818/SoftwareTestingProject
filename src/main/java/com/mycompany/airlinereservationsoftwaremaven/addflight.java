@@ -11,6 +11,8 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.regex.Pattern;
+import javax.swing.ComboBoxModel;
 import javax.swing.JOptionPane;
 
 /*
@@ -228,7 +230,7 @@ public class addflight extends javax.swing.JInternalFrame {
     {
         try {
             Class.forName("com.mysql.jdbc.Driver");
-            con = DriverManager.getConnection("jdbc:mysql://localhost/airline","root","");
+            con = DriverManager.getConnection("jdbc:mysql://localhost/mysql","root","");
             Statement s = con.createStatement();
             ResultSet rs = s.executeQuery("select MAX(id) from flight");
             rs.next();
@@ -290,7 +292,7 @@ public class addflight extends javax.swing.JInternalFrame {
       
         try {
             Class.forName("com.mysql.jdbc.Driver");
-             con = DriverManager.getConnection("jdbc:mysql://localhost/airline","root","");
+             con = DriverManager.getConnection("jdbc:mysql://localhost/mysql","root","");
             pst = con.prepareStatement("insert into flight(id,flightname,source,depart,date,deptime,arrtime,flightcharge)values(?,?,?,?,?,?,?,?)");
             
             pst.setString(1, id);
@@ -305,7 +307,7 @@ public class addflight extends javax.swing.JInternalFrame {
             pst.executeUpdate();
             
             
-            JOptionPane.showMessageDialog(null,"Flight Createdd.........");
+            JOptionPane.showMessageDialog(null,"Flight Created.........");
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(addflight.class.getName()).log(Level.SEVERE, null, ex);
         } catch (SQLException ex) {
@@ -318,6 +320,44 @@ public class addflight extends javax.swing.JInternalFrame {
         
         
     }//GEN-LAST:event_jButton1ActionPerformed
+
+    public boolean validateFlightName(){
+        String regex = "^[a-zA-Z]{1,64}$";
+        boolean valid = Pattern.matches(regex, txtflightname.getText());
+        return valid;
+    }
+    public void setTxtFlightName(String txt){
+        txtflightname.setText(txt);
+    }
+
+
+    public boolean isValidFlightID(){
+        String regex = "^[FO0-9[<]]{1,5}+$";
+        boolean result = Pattern.matches(regex, txtflightid.getText());
+        return result;
+    }
+    public void setFLID(String flid) {
+        txtflightid.setText(flid);
+    }
+
+
+    public boolean validateArrTime(){
+        String regex = "^[APM0-9[.]]+$";
+        boolean valid = Pattern.matches(regex, txtarrtime.getText());
+        return valid;
+    }
+    public void setTxtArrTime(String txt){
+        txtarrtime.setText(txt);
+    }
+
+    public boolean validateDepTime(){
+        String regex = "^[APM0-9[.]]+$";
+        boolean valid = Pattern.matches(regex, txtdtime.getText());
+        return valid;
+    }
+    public void setTxtDepTime(String txt){
+        txtdtime.setText(txt);
+    }
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // TODO add your handling code here:

@@ -21,6 +21,7 @@ import org.junit.jupiter.params.provider.ValueSource;
 /**
  *
  * @author drose
+ * @author tmartin
  */
 public class addCustomerTest {
     
@@ -35,7 +36,7 @@ public class addCustomerTest {
         addCust = new addCustomer();
         try{
             Class.forName("com.mysql.cj.jdbc.Driver");
-            con = DriverManager.getConnection("jdbc:mysql://localhost/airline","root","");
+            con = DriverManager.getConnection("jdbc:mysql://localhost/mysql","root","");
         }catch(SQLException e){
             e.printStackTrace();
         } catch (ClassNotFoundException e) {
@@ -392,4 +393,6 @@ public class addCustomerTest {
         boolean result = addCust.isValidPhoneNo();
         assertFalse(result);
     }
+
+
 }

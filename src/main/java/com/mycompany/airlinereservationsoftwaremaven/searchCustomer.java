@@ -22,6 +22,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.regex.Pattern;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
@@ -338,21 +339,59 @@ public class searchCustomer extends javax.swing.JInternalFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    
-    
-    
-    
- 
-    
-   
-    
-    
-    
-    
-    
-    
-    
-    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  public boolean validateFirstName(){
+    String regex = "^[a-zA-Z[-]]{1,64}$";
+    boolean valid = Pattern.matches(regex, txtfirstname.getText());
+    return valid;
+  }
+
+  public boolean isValidNIC(){
+    String regex = "^\\d{10}$";
+    boolean valid = Pattern.matches(regex, txtnic.getText());
+    return valid;
+  }
+
+  public boolean isValidPPID(){
+    String regex = "^[a-zA-Z0-9[<]]+$";
+    boolean result = Pattern.matches(regex, txtpassport.getText());
+    return result;
+  }
+
+  public boolean isValidPhoneNo(){
+    String regex = "^[0-9]+$";
+    boolean result = Pattern.matches(regex, txtcontact.getText());
+    return result;
+  }
+
+  public void setTxtFirstName(String txt){
+    txtfirstname.setText(txt);
+  }
+
+  public void setNIC(String nic){
+    txtnic.setText(nic);
+  }
+
+  public void setPPID(String ppid) {
+    txtpassport.setText(ppid);
+  }
+
+  public void setPhoneNo(String pn) {
+    txtcontact.setText(pn);
+  }
     
     private void txtlastnameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtlastnameActionPerformed
         // TODO add your handling code here:
@@ -438,7 +477,7 @@ public class searchCustomer extends javax.swing.JInternalFrame {
          
         try {
             Class.forName("com.mysql.jdbc.Driver");
-            con = DriverManager.getConnection("jdbc:mysql://localhost/airline","root","");
+            con = DriverManager.getConnection("jdbc:mysql://localhost/mysql","root","");
             pst = con.prepareStatement("update customer set firstname = ?,lastname = ?,nic = ?,passport = ?,address= ?,dob = ?,gender = ?,contact = ?,photo = ? where id = ?");
             
 
@@ -455,7 +494,7 @@ public class searchCustomer extends javax.swing.JInternalFrame {
             pst.executeUpdate();
             
             
-            JOptionPane.showMessageDialog(null,"Registation Updateddddd.........");
+            JOptionPane.showMessageDialog(null,"Registration Updated.........");
             
             
         } catch (ClassNotFoundException ex) {
@@ -489,7 +528,7 @@ public class searchCustomer extends javax.swing.JInternalFrame {
         
         try {
             Class.forName("com.mysql.jdbc.Driver");
-            con = DriverManager.getConnection("jdbc:mysql://localhost/airline","root","");
+            con = DriverManager.getConnection("jdbc:mysql://localhost/mysql","root","");
             pst = con.prepareStatement("select * from customer where id = ?");
             pst.setString(1, id);
             ResultSet rs = pst.executeQuery();

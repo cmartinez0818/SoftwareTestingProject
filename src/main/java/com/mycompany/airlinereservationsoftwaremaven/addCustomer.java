@@ -88,6 +88,7 @@ public class addCustomer extends javax.swing.JInternalFrame {
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
+        txtdob = new java.util.Date();
 
         jPanel1.setBackground(new java.awt.Color(51, 0, 255));
 
@@ -339,7 +340,7 @@ public class addCustomer extends javax.swing.JInternalFrame {
         try {
             //Class.forName("com.mysql.jdbc.Driver");
             Class.forName("com.mysql.cj.jdbc.Driver");
-            con = DriverManager.getConnection("jdbc:mysql://localhost/airline","root","");
+            con = DriverManager.getConnection("jdbc:mysql://localhost/mysql","root","");
             Statement s = con.createStatement();
             ResultSet rs = s.executeQuery("select MAX(id) from customer");
             rs.next();
@@ -444,9 +445,10 @@ public class addCustomer extends javax.swing.JInternalFrame {
          String nic = txtnic.getText(); 
         String passport = txtpassport.getText();
          String address = txtaddress.getText();
+         String dob = String.valueOf(txtdob.getDate());
         
         DateFormat da = new SimpleDateFormat("yyyy-MM-dd");
-        String date = da.format(new java.util.Date()/*txtdob.getDate()*/);
+        String date = da.format(txtdob.getDate());
         String Gender;
         
         if(r1.isSelected())
@@ -478,7 +480,7 @@ public class addCustomer extends javax.swing.JInternalFrame {
             pst.executeUpdate();
             
             
-            JOptionPane.showMessageDialog(null,"Registation Createdd.........");
+            JOptionPane.showMessageDialog(null,"Registration Created.........");
             
             
         } catch (ClassNotFoundException ex) {
@@ -588,6 +590,7 @@ public class addCustomer extends javax.swing.JInternalFrame {
     private javax.swing.JTextField txtnic;
     private javax.swing.JTextField txtpassport;
     private javax.swing.JLabel txtphoto;
+    private java.util.Date txtdob;
     // End of variables declaration//GEN-END:variables
 
 }

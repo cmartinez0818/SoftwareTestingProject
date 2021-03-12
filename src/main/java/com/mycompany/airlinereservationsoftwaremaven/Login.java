@@ -122,14 +122,16 @@ public class Login extends javax.swing.JFrame {
         pack();
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
-
+    public void setuser(String user) {
+        txtuser.setText(user);
+    }
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
         
         String username = txtuser.getText();
         String password = txtpass.getText();
-        
-        
+
+
         if(username.isEmpty() ||  password.isEmpty())
         {
             JOptionPane.showMessageDialog(this, "UserName or Password Blank");
@@ -139,7 +141,7 @@ public class Login extends javax.swing.JFrame {
             try {
                 //Class.forName("com.mysql.jdbc.Driver");
                 Class.forName("com.mysql.cj.jdbc.Driver");
-                con = DriverManager.getConnection("jdbc:mysql://localhost/airline","root","");
+                con = DriverManager.getConnection("jdbc:mysql://localhost/mysql","root","");
                 pst = con.prepareStatement("select * from user where username = ? and password = ?");
                  pst.setString(1, username);
                  pst.setString(2, password);

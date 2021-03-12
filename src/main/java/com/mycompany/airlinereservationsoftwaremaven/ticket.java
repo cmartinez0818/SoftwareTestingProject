@@ -16,6 +16,7 @@ import java.util.Date;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.regex.Pattern;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
@@ -427,7 +428,7 @@ public class ticket extends javax.swing.JInternalFrame {
         
         try {
             Class.forName("com.mysql.jdbc.Driver");
-             con = DriverManager.getConnection("jdbc:mysql://localhost/airline","root","");
+             con = DriverManager.getConnection("jdbc:mysql://localhost/mysql","root","");
              pst = con.prepareStatement("SELECT * from flight WHERE source = ? and depart = ?");
              
              
@@ -491,7 +492,7 @@ public class ticket extends javax.swing.JInternalFrame {
     {
         try {
             Class.forName("com.mysql.jdbc.Driver");
-            con = DriverManager.getConnection("jdbc:mysql://localhost/airline","root","");
+            con = DriverManager.getConnection("jdbc:mysql://localhost/mysql","root","");
             Statement s = con.createStatement();
             ResultSet rs = s.executeQuery("select MAX(id) from ticket");
             rs.next();
@@ -543,7 +544,7 @@ public class ticket extends javax.swing.JInternalFrame {
         
         try {
             Class.forName("com.mysql.jdbc.Driver");
-            con = DriverManager.getConnection("jdbc:mysql://localhost/airline","root","");
+            con = DriverManager.getConnection("jdbc:mysql://localhost/mysql","root","");
             pst = con.prepareStatement("select * from customer where id = ?");
             pst.setString(1, id);
             ResultSet rs = pst.executeQuery();
@@ -630,7 +631,7 @@ public class ticket extends javax.swing.JInternalFrame {
       
         try {
             Class.forName("com.mysql.jdbc.Driver");
-             con = DriverManager.getConnection("jdbc:mysql://localhost/airline","root","");
+             con = DriverManager.getConnection("jdbc:mysql://localhost/mysql","root","");
             pst = con.prepareStatement("insert into ticket(id,flightid,custid,class,price,seats,date)values(?,?,?,?,?,?,?)");
             
             pst.setString(1, ticketid);
@@ -645,7 +646,7 @@ public class ticket extends javax.swing.JInternalFrame {
             pst.executeUpdate();
             
             
-            JOptionPane.showMessageDialog(null,"Ticket Bookeed.........");
+            JOptionPane.showMessageDialog(null,"Ticket Booked.........");
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(addflight.class.getName()).log(Level.SEVERE, null, ex);
         } catch (SQLException ex) {
@@ -673,6 +674,35 @@ public class ticket extends javax.swing.JInternalFrame {
         this.hide();
         
     }//GEN-LAST:event_jButton2ActionPerformed
+
+    public boolean validateTicketFirstName(){
+        String regex = "^[a-zA-Z[-]]{1,64}$";
+        boolean valid = Pattern.matches(regex, txtfirstname.getText());
+        return valid;
+    }
+    public void setTicketFirstName(String txt){
+        txtfirstname.setText(txt);
+    }
+
+    public boolean validateTicketFlightName(){
+        String regex = "^[a-zA-Z]{1,64}$";
+        boolean valid = Pattern.matches(regex, flightname.getText());
+        return valid;
+    }
+    public void setTicketFlightName(String ttxt){
+        flightname.setText(ttxt);
+    }
+
+
+    public boolean isValidTicketFlightID(){
+        String regex = "^[a-zA-Z0-9[<]]+$";
+        boolean result = Pattern.matches(regex, flightno.getText());
+        return result;
+    }
+    public void setFLTID(String fltid) {
+        flightno.setText(fltid);
+    }
+
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
