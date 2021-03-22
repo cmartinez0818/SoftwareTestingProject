@@ -1,8 +1,6 @@
 package com.mycompany.airlinereservationsoftwaremaven;
 
 
-
-
 import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
@@ -15,7 +13,6 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -26,10 +23,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Pattern;
 import javax.imageio.ImageIO;
-import javax.imageio.stream.ImageInputStream;
-import javax.imageio.stream.ImageInputStreamImpl;
 import javax.swing.ImageIcon;
-import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -43,7 +37,7 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 
 
 public class searchCustomer extends javax.swing.JInternalFrame {
-
+  
     /**
      * Creates new form addCustomer
      */
@@ -84,7 +78,7 @@ public class searchCustomer extends javax.swing.JInternalFrame {
     PreparedStatement pst;
     
     String updateMsg;
-    
+    String findState;
     String path=null;
     byte[] userimage=null;
     
@@ -375,21 +369,6 @@ public class searchCustomer extends javax.swing.JInternalFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     
-    
-    
-    
- 
-    
-   
-    
-    
-    
-    
-    
-    
-    
-    
-    
     private void txtlastnameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtlastnameActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtlastnameActionPerformed
@@ -432,17 +411,6 @@ public class searchCustomer extends javax.swing.JInternalFrame {
         } catch (IOException ex) {
             Logger.getLogger(addCustomer.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
-       
-       
-       
-       
-       
-       
-       
-        
-        
-        
         
         
     }//GEN-LAST:event_jButton1ActionPerformed
@@ -495,11 +463,9 @@ public class searchCustomer extends javax.swing.JInternalFrame {
                     pstFN.setString(1, nic);
                     stmts.add(pstFN);
                 }else{
-                    System.out.println("The nic is taken");
                     allIsUpdated = false;
                 }                
             }else if(!nic.isEmpty()){
-                System.out.println("The nic was invalid .");
                 allIsUpdated = false;
             }
             if(isValidPPID()){
@@ -533,7 +499,7 @@ public class searchCustomer extends javax.swing.JInternalFrame {
                 pstFN.setString(1, gend);
                 stmts.add(pstFN);
             }else allIsUpdated = false;
-            if(userimage!=null){
+            if(userimage.length!=0){
                 PreparedStatement pstFN = con.prepareStatement("update customer set photo = ? where id = ?");
                 pstFN.setBytes(1, userimage);
                 stmts.add(pstFN);
@@ -544,7 +510,7 @@ public class searchCustomer extends javax.swing.JInternalFrame {
             }
             
             String msg = "Registation Updated.";
-            //JOptionPane.showMessageDialog(null,msg);
+            JOptionPane.showMessageDialog(null,msg);
             updateMsg = allIsUpdated ? msg : "Not all fields were updated";
             
         } catch (ClassNotFoundException ex) {
@@ -552,14 +518,6 @@ public class searchCustomer extends javax.swing.JInternalFrame {
         } catch (SQLException ex) {
             Logger.getLogger(addCustomer.class.getName()).log(Level.SEVERE, null, ex);
         }
-            
-         
-         
-        
-        
-        
-        
-        
         
         
     }//GEN-LAST:event_updateButtonActionPerformed
@@ -577,7 +535,7 @@ public class searchCustomer extends javax.swing.JInternalFrame {
         
         
         try {
-            Class.forName("com.mysql.jdbc.Driver");
+            Class.forName("com.mysql.cj.jdbc.Driver");
             con = DriverManager.getConnection("jdbc:mysql://localhost/airline","root","");
             pst = con.prepareStatement("select * from customer where id = ?");
             pst.setString(1, id);
@@ -585,7 +543,9 @@ public class searchCustomer extends javax.swing.JInternalFrame {
             
             if(rs.next() == false)
             {
-                JOptionPane.showMessageDialog(this, "Record not Found");
+                String msg = "Customer not found.";
+                JOptionPane.showMessageDialog(this, msg);
+                findState = msg;
             }
             else
             {
@@ -614,10 +574,6 @@ public class searchCustomer extends javax.swing.JInternalFrame {
                 ImageIcon newImage = new ImageIcon(myImg);
                  
                  
-                 
-                 
-                 
-                 
                  if(gender.equals("Female"))
                  {
                      r1.setSelected(false);
@@ -631,9 +587,6 @@ public class searchCustomer extends javax.swing.JInternalFrame {
                  }
                  String contact = rs.getString("contact");
                  
-                 
-                 
-                 
                  txtfirstname.setText(fname.trim());
                  txtlastname.setText(lname.trim());
                   txtnic.setText(nic.trim());
@@ -644,20 +597,7 @@ public class searchCustomer extends javax.swing.JInternalFrame {
                   //txtdob.setDate(date1);
                   txtphoto.setIcon(newImage);
               
-                  
-                 
-                 
-                
-                
             }
-                    
-            
-            
-            
-            
-              
-              
-              
               
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(searchCustomer.class.getName()).log(Level.SEVERE, null, ex);

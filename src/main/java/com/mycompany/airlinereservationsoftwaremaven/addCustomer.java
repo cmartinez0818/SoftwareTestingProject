@@ -1,8 +1,5 @@
 package com.mycompany.airlinereservationsoftwaremaven;
 
-
-
-
 import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
@@ -17,7 +14,6 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Pattern;
@@ -482,11 +478,11 @@ public class addCustomer extends javax.swing.JInternalFrame {
                 }
             }else{
                 errMsg = "The entered NIC is already in use by an existing customer";
-                //JOptionPane.showMessageDialog(this,"The entered NIC is already in use by an existing customer");
+                JOptionPane.showMessageDialog(this,"The entered NIC is already in use by an existing customer");
             }
         }else{
             errMsg = "Invalid NIC input. Enter exactly 10 digits only.";
-            //JOptionPane.showMessageDialog(this,"Invalid NIC input. Enter exacly 10 digits only.");             
+            JOptionPane.showMessageDialog(this,"Invalid NIC input. Enter exacly 10 digits only.");             
         }
         
     }//GEN-LAST:event_addCustomerBtnActionPerformed

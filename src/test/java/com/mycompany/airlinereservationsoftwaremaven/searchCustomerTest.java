@@ -6,13 +6,10 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import java.util.stream.Stream;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -29,24 +26,26 @@ public class searchCustomerTest {
     private static Main desktop;
     private static searchCustomer searchCust;
     private static Connection con;
-    private static String testNIC;
     
     @BeforeAll
     public static void setUpClass(){
         desktop = new Main();
         searchCust = new searchCustomer();
-        testNIC = "9876543210";
-        String query = "INSERT INTO Customer (ID,nic,firstname,lastname,passport,address,dob,gender,contact,photo)"
+        String query1 = "INSERT INTO Customer (ID,nic,firstname,lastname,passport,address,dob,gender,contact,photo)"
                     + " VALUES('CS005','9876543210','Johnny','Last','1<3<2','123 there','','Male',987,00000000);";
+        String query2 = "INSERT INTO Customer (ID,nic,firstname,lastname,passport,address,dob,gender,contact,photo)"
+                    + " VALUES('CS006','8876543210','Johnny','Last','1<3<2','123 there','','Male',987,00000000);";
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
             con = DriverManager.getConnection("jdbc:mysql://localhost/airline","root","");
             addCustomer ac = new addCustomer();
-            ac.setNIC("9876543210");
-            if(ac.isUniqueNIC()){
-                Statement st = con.createStatement();
-                st.executeUpdate(query);
-            }            
+            //let's assume 9876543210 and 8876543210 are unique.
+            Statement st = con.createStatement();
+            st.executeUpdate(query1);
+            st.executeUpdate(query2);
+            /*ac.setNIC("9876543210");
+            if(ac.isUniqueNIC()){                
+            }   */         
         } catch (SQLException ex) {
             ex.printStackTrace();
         } catch (ClassNotFoundException ex) {
@@ -58,7 +57,7 @@ public class searchCustomerTest {
     public static void tearDownClass(){
         searchCust = null;
         try {
-            String query = "delete from Customer where ID = 'CS005'";
+            String query = "delete from Customer where ID = 'CS005' OR 'CS006'";
             Statement st = con.createStatement();
             st.executeUpdate(query);
             con.close();
@@ -96,14 +95,38 @@ public class searchCustomerTest {
      * Specifically: 9876543210
      */
     @Test
-    public void testFindButtonActionPerformed() {
+    public void testFindCustomer() {
         searchCust.setCustIdTxt("CS005");
         searchCust.getFindButton().doClick();
-        assertEquals(testNIC, searchCust.getTxtNic());
+        assertEquals("9876543210", searchCust.getTxtNic());
     }
     
     /**
-     * Test Case ID: UTest-validCustomerIDSearchInput-001
+     * Test Case ID: UTest-searchCustomer-002
+     * Requirement: REQ-19 The booking agent shall search for a customer account
+     * by using the customer account’s ID as search input.
+     * Purpose: To test that the SW responds gracefully when a customer is not
+     * found.
+     * Test setup: create a new insert query and remove the test record after
+     * testing is done. 
+     * Test Strategy: Output equivalence class testing.
+     *  Partition output space as follows:
+     *  - customer is found
+     *  - customer is not found
+     * Input: user enters "John" in search box. call method
+     * findButtonActionPerformed()
+     * Expected state: The desktop shall be in the 'Customer not found.'
+     * state.
+     */
+    @Test
+    public void testFindCustomerNeg() {
+        searchCust.setCustIdTxt("John");
+        searchCust.getFindButton().doClick();
+        assertEquals("Customer not found.", searchCust.findState);
+    }
+    
+    /**
+     * Test Case ID: UTest-validCustomerIDUpdateInput-001
      * Requirement: REQ-49 The booking agent shall update the customer’s account
      * information that has been displayed as a result of the agent’s search
      * query, which is outlined in this statement’s dependencies.
@@ -121,16 +144,16 @@ public class searchCustomerTest {
      */
     @ParameterizedTest
     @ValueSource(strings = {"0", "1"})
-    public void testValidCustomerIDSearch(String choice) {
+    public void testValidCustomerIDUpdate(String choice) {
         byte [] blob = {00000000};
-        testNIC = "098745632"+choice;
-        searchCust.fillSearchCustomer("CS005","dave","smith",testNIC,"11<<59","over there", choice, "1234567892", blob);
+        String testNIC = "098745632"+choice;
+        searchCust.fillSearchCustomer("CS006","dave","smith",testNIC,"11<<59","over there", choice, "1234567892", blob);
         searchCust.getUpdateButton().doClick();
         assertEquals("Registation Updated.", searchCust.updateMsg);
     }
     
     /**
-     * Test Case ID: UTest-validCustomerIDSearchInput-002
+     * Test Case ID: UTest-validCustomerIDUpdateInput-002
      * Requirement: REQ-49 The booking agent shall update the customer’s account
      * information that has been displayed as a result of the agent’s search
      * query, which is outlined in this statement’s dependencies.
@@ -163,12 +186,15 @@ public class searchCustomerTest {
      * state.
      * 100% statement + branch
      */
-    //@ParameterizedTest
-    //@MethodSource("tc2Provider")
-    public void testValidCustomerIDSearchNeg(Object[] args) {
-        searchCust.fillSearchCustomer("CS005", (String)args[2],(String)args[2],
-                (String)args[1],(String)args[4],(String)args[5],
-                (String)args[0], (String)args[7], (byte[])args[0]);
+    @ParameterizedTest
+    @MethodSource("tc2Provider")
+    public void testValidCustomerIDUpdateNeg(String[] args) {
+        byte[] blob = {00000000};
+        if(args[8].equals("2")){
+            blob = new byte[0];
+        }
+        searchCust.fillSearchCustomer("CS006", args[2],args[2],args[1],args[4],
+                args[5], args[0], args[7], blob);
         searchCust.getUpdateButton().doClick();
         assertEquals("Not all fields were updated", searchCust.updateMsg);
     }
@@ -188,25 +214,25 @@ public class searchCustomerTest {
         String idob = "";
         String pn = "1234567890";
         String ipn = "1-800-granola";
-        byte[] blob = {00000000};
-        byte[] iblob = null;
+        String blob = "1";
+        String iblob = "2";
         return Stream.of(
-            Arguments.of( new Object[]{"-1", nic, fn, fn, ppid, addr, dob, pn, (Object)blob}),
-            Arguments.of( new Object[]{"-1", inic, fn, fn, ppid, iaddr, idob, ipn, (Object)iblob}),
-            Arguments.of( new Object[]{"-1", badnic, ifn, ifn, ippid, addr, dob, pn, (Object)iblob}),
-            Arguments.of( new Object[]{"-1", nic, ifn, ifn, ippid, iaddr, idob, ipn, (Object)blob}),
-            Arguments.of( new Object[]{"0", nic, fn, ifn, ippid, addr, idob, ipn, (Object)blob}),
-            Arguments.of( new Object[]{"0", inic, fn, ifn, ippid, iaddr, dob, pn, (Object)iblob}),
-            Arguments.of( new Object[]{"0", badnic, ifn, fn, ppid, addr, idob, ipn, (Object)iblob}),
-            Arguments.of( new Object[]{"0", badnic, ifn, fn, ppid, iaddr, dob, pn, (Object)blob}),
-            Arguments.of( new Object[]{"1", nic, ifn, fn, ippid, iaddr, dob, ipn, (Object)iblob}),
-            Arguments.of( new Object[]{"1", inic, ifn, fn, ippid, addr, idob, pn, (Object)blob}),
-            Arguments.of( new Object[]{"1", badnic, fn, ifn, ppid, iaddr, dob, ipn, (Object)blob}),
-            Arguments.of( new Object[]{"1", inic, fn, ifn, ppid, addr, idob, pn, (Object)iblob}),
-            Arguments.of( new Object[]{"2", nic, ifn, ifn, ppid, iaddr, idob, pn, (Object)iblob}),
-            Arguments.of( new Object[]{"2", inic, ifn, ifn, ppid, addr, dob, ipn, (Object)blob}),
-            Arguments.of( new Object[]{"2", badnic, fn, fn, ippid, iaddr, idob, pn, (Object)blob}),
-            Arguments.of( new Object[]{"2", inic, fn, fn, ippid, addr, dob, ipn, (Object)iblob})
+            Arguments.of((Object) new String[]{"-1", nic, fn, fn, ppid, addr, dob, pn, blob}),
+            Arguments.of((Object) new String[]{"-1", inic, fn, fn, ppid, iaddr, idob, ipn, iblob}),
+            Arguments.of((Object) new String[]{"-1", badnic, ifn, ifn, ippid, addr, dob, pn, iblob}),
+            Arguments.of((Object) new String[]{"-1", nic, ifn, ifn, ippid, iaddr, idob, ipn, blob}),
+            Arguments.of((Object) new String[]{"0", nic, fn, ifn, ippid, addr, idob, ipn, blob}),
+            Arguments.of((Object) new String[]{"0", inic, fn, ifn, ippid, iaddr, dob, pn, iblob}),
+            Arguments.of((Object) new String[]{"0", badnic, ifn, fn, ppid, addr, idob, ipn, iblob}),
+            Arguments.of((Object) new String[]{"0", badnic, ifn, fn, ppid, iaddr, dob, pn, blob}),
+            Arguments.of((Object) new String[]{"1", nic, ifn, fn, ippid, iaddr, dob, ipn, iblob}),
+            Arguments.of((Object) new String[]{"1", inic, ifn, fn, ippid, addr, idob, pn, blob}),
+            Arguments.of((Object) new String[]{"1", badnic, fn, ifn, ppid, iaddr, dob, ipn, blob}),
+            Arguments.of((Object) new String[]{"1", inic, fn, ifn, ppid, addr, idob, pn, iblob}),
+            Arguments.of((Object) new String[]{"2", nic, ifn, ifn, ppid, iaddr, idob, pn, iblob}),
+            Arguments.of((Object) new String[]{"2", inic, ifn, ifn, ppid, addr, dob, ipn, blob}),
+            Arguments.of((Object) new String[]{"2", badnic, fn, fn, ippid, iaddr, idob, pn, blob}),
+            Arguments.of((Object) new String[]{"2", inic, fn, fn, ippid, addr, dob, ipn, iblob})
         );
     }
 }
