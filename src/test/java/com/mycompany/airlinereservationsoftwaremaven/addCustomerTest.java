@@ -12,6 +12,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
@@ -76,6 +77,11 @@ public class addCustomerTest {
             ex.printStackTrace();
         }
     }
+    
+    @AfterEach
+    public void clearErrMsg(){
+        addCust.errMsg = "";
+    }
 
     /**
      * Test Case ID: UTest-validateName-001
@@ -97,7 +103,7 @@ public class addCustomerTest {
     @Test
     public void testValidateNameTrue() {
         addCust.setTxtFirstName("David-Steven");
-        boolean result = addCust.validateFirstName();
+        boolean result = addCust.isValidFirstName();
         assertTrue(result);
     }
     
@@ -122,7 +128,7 @@ public class addCustomerTest {
     @ValueSource(strings = {"David-Steven1"," "})
     public void testValidateNameFalse(String s) {
         addCust.setTxtFirstName(s);
-        boolean result = addCust.validateFirstName();
+        boolean result = addCust.isValidFirstName();
         assertFalse(result);
     }
     
@@ -152,7 +158,7 @@ public class addCustomerTest {
     @ValueSource(strings = {"D","DR", "JvjggOVQYOO","DJvjggOVQYOOwKKJRXJVBYzBPnRLvzEqrlPvidyfeIhEuOjzDaUngbXsgfurKaBo"})
     public void testValidateNameLength(String input) {
         addCust.setTxtFirstName(input);
-        boolean result = addCust.validateFirstName();
+        boolean result = addCust.isValidFirstName();
         assertTrue(result);
     }
     
@@ -181,7 +187,7 @@ public class addCustomerTest {
     @ValueSource(strings = {"","DJvjggOVQYOOwKKJRXJVBYzBPnRLvzEqrlPvidyfeIhEuOjzDaUngbXsgfurKaBoA"})
     public void testValidateNameLengthNeg(String input) {
         addCust.setTxtFirstName(input);
-        boolean result = addCust.validateFirstName();
+        boolean result = addCust.isValidFirstName();
         assertFalse(result);
     }
     
@@ -497,5 +503,64 @@ public class addCustomerTest {
         }
         addCust.hide();
         desktop.getDesktop().remove(addCust);        
+    }
+    
+    /**
+     * Test Case ID: UTest-invalidCustomerCreationInput-001
+     * Requirement: REQ-49 Upon any invalid input, the Airline Reservation 
+     * software shall display where in the GUI invalid input occurred.
+     * Purpose: To test that the SW does not create a new customer account using
+     * negative input provided by the booking agent using error handling.
+     * Test setup: Open an add customer tab virtually in memory. 
+     * Test Strategy: Output equivalence class testing
+     * Partitions:
+     * - Set of positive inputs that allow customer creation
+     * - Set of invalid inputs that do not allow customer creation
+     * Input: enter input for Nic no. Then simulate add button click.
+     * Expected state: The desktop is displaying "The entered NIC is already in
+     * use by an existing customer".
+     */
+    @Test
+    public void testNegCustomerCreationInput() {
+        try {
+            String setSt = "INSERT INTO Customer (ID,nic,firstname,lastname,passport,address,dob,gender,contact,photo)"
+                    + " VALUES('abc123','1234567890','','','','','','',1,00000000);";
+            String remSt = "DELETE FROM Customer WHERE ID = 'abc123';";
+            Statement setQuery = con.createStatement();
+            setQuery.executeUpdate(setSt);
+            addCust.setNIC("1234567890");
+            addCust.getAddButton().doClick();
+            Statement delQuery = con.createStatement();
+            delQuery.executeUpdate(remSt);
+            String msg = "The entered NIC is already in use by an existing customer";
+            assertEquals(msg, addCust.errMsg);
+            setQuery.close();
+            delQuery.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+    
+        /**
+     * Test Case ID: UTest-invalidCustomerCreationInput-002
+     * Requirement: REQ-49 Upon any invalid input, the Airline Reservation 
+     * software shall display where in the GUI invalid input occurred.
+     * Purpose: To test that the SW does not create a new customer account using
+     * invalid input provided by the booking agent using error handling.
+     * Test setup: Open an add customer tab virtually in memory. 
+     * Test Strategy: Output equivalence class testing
+     * Partitions:
+     * - Set of positive inputs that allow customer creation
+     * - Set of invalid inputs that do not allow customer creation
+     * Input: enter input for Nic no. Then simulate add button click.
+     * Expected state: The desktop is displaying "Invalid NIC input. Enter
+     * exactly 10 digits only."
+     */
+    @Test
+    public void testInvalidCustomerCreationInput() {
+        addCust.setNIC("15ht6");
+        addCust.getAddButton().doClick();
+        String msg = "Invalid NIC input. Enter exactly 10 digits only.";
+        assertEquals(msg, addCust.errMsg);
     }
 }
