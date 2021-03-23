@@ -14,6 +14,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Pattern;
@@ -424,17 +425,22 @@ public class addCustomer extends javax.swing.JInternalFrame {
         
     }//GEN-LAST:event_jButton1ActionPerformed
 
-    private void addCustomerBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addCustomerBtnActionPerformed
+    private void addCustomerBtnActionPerformed(java.awt.event.ActionEvent evt) {                                               
                 
         String id = txtid.getText();
         String firstname = txtfirstname.getText();
         String lastname = txtlastname.getText();
         String nic = txtnic.getText(); 
         String passport = txtpassport.getText();
-        String address = txtaddress.getText();
-        
+        String address = txtaddress.getText();        
         DateFormat da = new SimpleDateFormat("yyyy-MM-dd");
-        String date = da.format(new java.util.Date()/*txtdob.getDate()*/);
+        String date;
+        if(txtdob!=null){
+            date = da.format(txtdob.getDate());
+        }else{
+            errMsg = "txtdob field does not exist.";
+            return;
+        }
         String Gender;
         
         if(r1.isSelected())
@@ -446,8 +452,7 @@ public class addCustomer extends javax.swing.JInternalFrame {
             Gender = "FeMale";
         }
         
-        String contact = txtcontact.getText();
-         
+        String contact = txtcontact.getText();         
         if(isValidNIC()){
             if(isUniqueNIC()){  
                 try {
@@ -485,7 +490,7 @@ public class addCustomer extends javax.swing.JInternalFrame {
             JOptionPane.showMessageDialog(this,"Invalid NIC input. Enter exacly 10 digits only.");             
         }
         
-    }//GEN-LAST:event_addCustomerBtnActionPerformed
+    }                                              
 
     private void cancelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelButtonActionPerformed
         // TODO add your handling code here:
@@ -560,7 +565,8 @@ public class addCustomer extends javax.swing.JInternalFrame {
     }
     
     public javax.swing.JButton getAddButton() {
-        return addCustomerBtn;
+        javax.swing.JButton obj = addCustomerBtn;
+        return obj;
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -589,6 +595,7 @@ public class addCustomer extends javax.swing.JInternalFrame {
     private javax.swing.JTextField txtnic;
     private javax.swing.JTextField txtpassport;
     private javax.swing.JLabel txtphoto;
+    private java.util.Date txtdob;
     // End of variables declaration//GEN-END:variables
 
 }

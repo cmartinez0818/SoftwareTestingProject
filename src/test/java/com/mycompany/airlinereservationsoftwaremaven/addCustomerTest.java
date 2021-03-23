@@ -11,6 +11,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import javax.swing.JButton;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
@@ -23,6 +24,7 @@ import org.junit.jupiter.params.provider.ValueSource;
 /**
  *
  * @author drose
+ * @author tmartin
  */
 public class addCustomerTest {
     
@@ -37,6 +39,7 @@ public class addCustomerTest {
     public static void setUpClass() {
         desktop = new Main();
         addCust = new addCustomer();
+        desktop.add(addCust).setVisible(true);
         try{
             Class.forName("com.mysql.cj.jdbc.Driver");
             con = DriverManager.getConnection("jdbc:mysql://localhost/airline","root","");
@@ -529,7 +532,8 @@ public class addCustomerTest {
             Statement setQuery = con.createStatement();
             setQuery.executeUpdate(setSt);
             addCust.setNIC("1234567890");
-            addCust.getAddButton().doClick();
+            JButton addBtn = addCust.getAddButton();
+            addBtn.doClick();
             Statement delQuery = con.createStatement();
             delQuery.executeUpdate(remSt);
             String msg = "The entered NIC is already in use by an existing customer";
@@ -559,7 +563,9 @@ public class addCustomerTest {
     @Test
     public void testInvalidCustomerCreationInput() {
         addCust.setNIC("15ht6");
-        addCust.getAddButton().doClick();
+        JButton addBtn = addCust.getAddButton();
+        System.out.println(addBtn);
+        addBtn.doClick();
         String msg = "Invalid NIC input. Enter exactly 10 digits only.";
         assertEquals(msg, addCust.errMsg);
     }

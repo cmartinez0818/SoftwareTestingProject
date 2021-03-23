@@ -31,6 +31,7 @@ public class searchCustomerTest {
     public static void setUpClass(){
         desktop = new Main();
         searchCust = new searchCustomer();
+        desktop.add(searchCust).setVisible(true);
         String query1 = "INSERT INTO Customer (ID,nic,firstname,lastname,passport,address,dob,gender,contact,photo)"
                     + " VALUES('CS005','9876543210','Johnny','Last','1<3<2','123 there','','Male',987,00000000);";
         String query2 = "INSERT INTO Customer (ID,nic,firstname,lastname,passport,address,dob,gender,contact,photo)"

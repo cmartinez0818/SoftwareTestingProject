@@ -42,7 +42,15 @@ public class searchCustomer extends javax.swing.JInternalFrame {
      * Creates new form addCustomer
      */
     public searchCustomer() {
-        initComponents();       
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            con = DriverManager.getConnection("jdbc:mysql://localhost/airline","root","");       
+            initComponents();
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(searchCustomer.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SQLException ex) {
+            Logger.getLogger(searchCustomer.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
     
     public void fillSearchCustomer(String id, String fn, String ln, String nic, String ppid, String addr, String gender, String phone, byte[] blob) {
@@ -444,8 +452,6 @@ public class searchCustomer extends javax.swing.JInternalFrame {
          
         try {
             boolean allIsUpdated = true;
-            Class.forName("com.mysql.cj.jdbc.Driver");
-            con = DriverManager.getConnection("jdbc:mysql://localhost/airline","root","");
             List<PreparedStatement> stmts = new ArrayList<>();
             if(isValidFirstName()){
                 PreparedStatement pstFN = con.prepareStatement("update customer set firstname = ? where id = ?");
@@ -507,14 +513,11 @@ public class searchCustomer extends javax.swing.JInternalFrame {
             for(PreparedStatement psmt:stmts){
                 psmt.setString(2, id);
                 psmt.executeUpdate();
-            }
-            
+            }      
             String msg = "Registation Updated.";
             JOptionPane.showMessageDialog(null,msg);
             updateMsg = allIsUpdated ? msg : "Not all fields were updated";
             
-        } catch (ClassNotFoundException ex) {
-            Logger.getLogger(addCustomer.class.getName()).log(Level.SEVERE, null, ex);
         } catch (SQLException ex) {
             Logger.getLogger(addCustomer.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -534,9 +537,7 @@ public class searchCustomer extends javax.swing.JInternalFrame {
         String id = txtcustid.getText();
         
         
-        try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
-            con = DriverManager.getConnection("jdbc:mysql://localhost/airline","root","");
+        try {            
             pst = con.prepareStatement("select * from customer where id = ?");
             pst.setString(1, id);
             ResultSet rs = pst.executeQuery();
@@ -599,8 +600,6 @@ public class searchCustomer extends javax.swing.JInternalFrame {
               
             }
               
-        } catch (ClassNotFoundException ex) {
-            Logger.getLogger(searchCustomer.class.getName()).log(Level.SEVERE, null, ex);
         } catch (SQLException ex) {
             Logger.getLogger(searchCustomer.class.getName()).log(Level.SEVERE, null, ex);
         }        
@@ -712,4 +711,5 @@ public class searchCustomer extends javax.swing.JInternalFrame {
     private javax.swing.JLabel txtphoto;
     private javax.swing.JButton updateButton;
     // End of variables declaration//GEN-END:variables
+
 }
