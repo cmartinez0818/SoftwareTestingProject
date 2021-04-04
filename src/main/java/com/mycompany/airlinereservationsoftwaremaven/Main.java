@@ -187,6 +187,11 @@ public class Main extends javax.swing.JFrame {
         
     }//GEN-LAST:event_jMenuItem5ActionPerformed
 
+    
+    public javax.swing.JDesktopPane getDesktop(){
+        return jDesktopPane1;
+    }
+    
     /**
      * @param args the command line arguments
      */

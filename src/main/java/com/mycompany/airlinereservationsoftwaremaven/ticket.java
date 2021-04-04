@@ -428,7 +428,7 @@ public class ticket extends javax.swing.JInternalFrame {
         
         try {
             Class.forName("com.mysql.jdbc.Driver");
-             con = DriverManager.getConnection("jdbc:mysql://localhost/mysql","root","");
+             con = DriverManager.getConnection("jdbc:mysql://localhost/airline","root","");
              pst = con.prepareStatement("SELECT * from flight WHERE source = ? and depart = ?");
              
              

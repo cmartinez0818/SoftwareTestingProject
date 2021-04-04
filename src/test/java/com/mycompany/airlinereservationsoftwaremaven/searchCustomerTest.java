@@ -1,322 +1,217 @@
 package com.mycompany.airlinereservationsoftwaremaven;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.stream.Stream;
 import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.AfterEach;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.params.provider.ValueSource;
-
+/**
+ * searchCustomer unit testing
+ * @author drose
+ */
 public class searchCustomerTest {
-
-  private static searchCustomer searchCust;
-  private static Connection con;
-
-  public searchCustomerTest() {
-  }
-
-  @BeforeAll
-  public static void setUpClass() {
-    searchCust = new searchCustomer();
-    try{
-      Class.forName("com.mysql.cj.jdbc.Driver");
-      con = DriverManager.getConnection("jdbc:mysql://localhost/mysql","root","");
-    }catch(SQLException e){
-      e.printStackTrace();
-    } catch (ClassNotFoundException e) {
-      e.printStackTrace();
+    
+    private static Main desktop;
+    private static searchCustomer searchCust;
+    private static Connection con;
+    
+    @BeforeAll
+    public static void setUpClass(){
+        desktop = new Main();
+        searchCust = new searchCustomer();
+        desktop.add(searchCust).setVisible(true);
+        String query1 = "INSERT INTO Customer (ID,nic,firstname,lastname,passport,address,dob,gender,contact,photo)"
+                    + " VALUES('CS005','9876543210','Johnny','Last','1<3<2','123 there','2000-05-01','Male',987,00000000);";
+        String query2 = "INSERT INTO Customer (ID,nic,firstname,lastname,passport,address,dob,gender,contact,photo)"
+                    + " VALUES('CS006','8876543210','Johnny','Last','1<3<2','123 there','2000-05-01','Male',987,00000000);";
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            con = DriverManager.getConnection("jdbc:mysql://localhost/airline","root","");
+            addCustomer ac = new addCustomer();
+            //let's assume 9876543210 and 8876543210 are unique.
+            Statement st = con.createStatement();
+            st.executeUpdate(query1);
+            st.executeUpdate(query2);
+            /*ac.setNIC("9876543210");
+            if(ac.isUniqueNIC()){                
+            }   */         
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        } catch (ClassNotFoundException ex) {
+            ex.printStackTrace();
+        }        
     }
-  }
-
-  @AfterAll
-  public static void tearDownClass() {
-    searchCust = null;
-    try {
-      con.close();
-    } catch (SQLException e) {
-      e.printStackTrace();
+    
+    @AfterAll
+    public static void tearDownClass(){
+        searchCust = null;
+        try {
+            String query = "delete from Customer where ID = 'CS005' OR 'CS006'";
+            Statement st = con.createStatement();
+            st.executeUpdate(query);
+            con.close();
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
     }
-  }
-
-  /**
-   * Test Case ID: UTest-validateName-001
-   * Requirement: REQ-2 The account’s name input fields in the Airline
-   * Reservation Software shall accept only alpha characters and the
-   * character ‘-‘.
-   * Purpose: To test that the input passed is valid input, ensuring that the
-   * input only contains alphabetic characters and/or '-'.
-   * Test setup: An object of the addCustomer class is created with the text
-   * value of member field txtfirstname set to "David-Steven".
-   * Test Strategy: Equivalence class testing
-   *  Partition input space as follows:
-   *  - character classes in input: [a-zA-Z[-]], [\.](any character)
-   * All Inputs:
-   *  - partition input values: "David-Steven", "David-Steven1", " "
-   * Input: call method validateFirstName()
-   * Expected output: method validateFirstName() returns true.
-   */
-  @Test
-  public void testValidateNameTrue() {
-    searchCust.setTxtFirstName("David-Steven");
-    boolean result = searchCust.validateFirstName();
-    assertTrue(result);
-  }
-
-  /**
-   * Test Case ID: UTest-validateName-002
-   * Requirement: REQ-2 The account’s name input fields in the Airline
-   * Reservation Software shall accept only alpha characters and the
-   * character ‘-‘.
-   * Purpose: To test that the input passed is not valid input, ensuring that
-   * the input only contains alphabetic characters and/or '-'.
-   * Test setup: An object of the addCustomer class is created with the text
-   * value of member field txtfirstname set to "David-Steven1".
-   * Test Strategy: Equivalence class testing
-   *  Partition input space as follows:
-   *  - character classes in input: [a-zA-Z[-]], [\.](any character)
-   * All Inputs:
-   *  - partition input values: "David-Steven", "David-Steven1", " "
-   * Input: call method validateFirstName()
-   * Expected output: method validateFirstName() returns false.
-   */
-  @ParameterizedTest
-  @ValueSource(strings = {"David-Steven1"," "})
-  public void testValidateNameFalse(String s) {
-    searchCust.setTxtFirstName(s);
-    boolean result = searchCust.validateFirstName();
-    assertFalse(result);
-  }
-
-  /**
-   * Test Case ID: UTest-validateName-003
-   * Requirement: REQ-2 The account’s name input fields in the Airline
-   * Reservation Software shall accept any amount of characters in between 1
-   * and 64 inclusive.
-   * Purpose: To test that the input passed is a valid size, ensuring that
-   * the input has a length between 1 and 64 inclusive.
-   * Test setup: An object of the addCustomer class is created. 6 tests are
-   * passed as parameterized tests.
-   * Test Strategy: Equivalence class testing w/ BVA
-   *  Partition input space as follows:
-   *  - character classes in input: {0}, {1,2,...63,64}, {65,...}
-   *  - select the test case at the boundary, and the adjacent case that's in
-   *      the positive class. Select the test case at the other boundary.
-   *      Select a test case inside the positive input class.
-   * All Inputs:
-   *  - partition input values: “D”, “DR”,
-   “DJvjggOVQYOOwKKJRXJVBYzBPnRLvzEqrlPvidyfeIhEuOjzDaUngbXsgfurKaBo”,
-   “JvjggOVQYOO”
-   * Input: call method validateFirstName()
-   * Expected output: method validateFirstName() returns true.
-   */
-  @ParameterizedTest
-  @ValueSource(strings = {"D","DR", "JvjggOVQYOO","DJvjggOVQYOOwKKJRXJVBYzBPnRLvzEqrlPvidyfeIhEuOjzDaUngbXsgfurKaBo"})
-  public void testValidateNameLength(String input) {
-    searchCust.setTxtFirstName(input);
-    boolean result = searchCust.validateFirstName();
-    assertTrue(result);
-  }
-
-  /**
-   * Test Case ID: UTest-validateName-004
-   * Requirement: REQ-2 The account’s name input fields in the Airline
-   * Reservation Software shall accept any amount of characters in between 1
-   * and 64 inclusive.
-   * Purpose: To test that the input passed is a valid size, ensuring that
-   * the input has a length between 1 and 64 inclusive.
-   * Test setup: An object of the addCustomer class is created. 2 tests are
-   * passed as parameterized tests.
-   * Test Strategy: Equivalence class testing w/ BVA
-   *  Partition input space as follows:
-   *  - character classes in input: {0}, {1,2,...63,64}, {65,...}
-   *  - select the test case at the boundary, and the adjacent case that's in
-   *      the negative class. Select the test case at the boundary of the
-   *      other negative input class.
-   * All Inputs:
-   *  - partition input values: “”,
-   “DJvjggOVQYOOwKKJRXJVBYzBPnRLvzEqrlPvidyfeIhEuOjzDaUngbXsgfurKaBoA”
-   * Input: call method validateFirstName()
-   * Expected output: method validateFirstName() returns false.
-   */
-  @ParameterizedTest
-  @ValueSource(strings = {"","DJvjggOVQYOOwKKJRXJVBYzBPnRLvzEqrlPvidyfeIhEuOjzDaUngbXsgfurKaBoA"})
-  public void testValidateNameLengthNeg(String input) {
-    searchCust.setTxtFirstName(input);
-    boolean result = searchCust.validateFirstName();
-    assertFalse(result);
-  }
-
-  /**
-   * Test Case ID: UTest-isValidNIC-001
-   * Requirement: REQ-6 The account’s NIC no. input field in the Airline
-   * Reservation Software shall accept only exactly 10 digit characters.
-   * Purpose: To test that the input passed is not the correct length,
-   * ensuring that the value is not used.
-   * Test setup: set the addCustomer object NIC member field using method
-   *  setNIC(). 2 test cases are used as input.
-   * Test Strategy: Equivalence class testing with BVA.
-   *  Partition input space as follows:
-   *  - set of NIC values of length 10
-   *  - set of NIC values not of length 10
-   * All inputs:
-   *  - partition input values at boundaries: 123456789, 12345678900
-   * Input: call method isValidNIC()
-   * Expected output: method isValidNIC() returns false.
-   */
-  @ParameterizedTest
-  @ValueSource(strings = {"123456789", "12345678900"})
-  public void testIsValidNICNeg(String s) {
-    searchCust.setNIC(s);
-    boolean result = searchCust.isValidNIC();
-    assertFalse(result);
-  }
-
-  /**
-   * Test Case ID: UTest-isValidNIC-002
-   * Requirement: REQ-6 The account’s NIC no. input field in the Airline
-   * Reservation Software shall accept only exactly 10 digit characters.
-   * Purpose: To test that the input passed contains invalid characters,
-   * ensuring that the value is not used.
-   * Test setup: set the addCustomer object NIC member field using method
-   *  setNIC(). 1 test case is used as input.
-   * Test Strategy: Equivalence class testing with BVA.
-   *  Partition input space as follows:
-   *  - set of NIC values of length 10 with 0 invalid characters
-   *  - set of NIC values of length 10 with more than 0 invalid characters
-   * All inputs:
-   *  - partition input values at boundaries: 12345A6789
-   * Input: call method isValidNIC()
-   * Expected output: method isValidNIC() returns false.
-   */
-  @Test
-  public void testIsValidNICInvld() {
-    searchCust.setNIC("12345A6789");
-    boolean result = searchCust.isValidNIC();
-    assertFalse(result);
-  }
-
-  /**
-   * Test Case ID: UTest-isValidNIC-003
-   * Requirement: REQ-6 The account’s NIC no. input field in the Airline
-   * Reservation Software shall accept only exactly 10 digit characters.
-   * Purpose: To test that the input passed contains valid characters,
-   * and that the length is 10 characters long.
-   * Test setup: set the addCustomer object NIC member field using method
-   *  setNIC(). 1 test case is used as input.
-   * Test Strategy: Equivalence class testing.
-   *  Partition input space as follows:
-   *  - set of NIC values of length 10 with 0 invalid characters
-   *  - set of NIC values of length 10 with more than 0 invalid characters
-   * All inputs:
-   *  - partition input value: 1234567890
-   * Input: call method isValidNIC()
-   * Expected output: method isValidNIC() returns true.
-   */
-  @Test
-  public void testIsValidNIC() {
-    searchCust.setNIC("1234567890");
-    boolean result = searchCust.isValidNIC();
-    assertTrue(result);
-  }
-
-  /**
-   * Test Case ID: UTest-isValidPPID-001
-   * Requirement: REQ-8 The account’s passport ID input field in the Airline
-   * Reservation Software shall accept only alphanumeric and '<' characters.
-   * Purpose: To test that the input passed does not contain invalid characters.
-   * Test setup: set the addCustomer object passport ID member field using
-   * method setPPID(). 1 test case is used as input.
-   * Test Strategy: Equivalence class testing.
-   *  Partition input space as follows:
-   *  - set of passport ID values without any invalid characters
-   *  - set of passport ID values with any invalid characters
-   * All inputs:
-   *  - partition input value: "abz029<<<"
-   * Input: call method isValidPPID()
-   * Expected output: method isValidPPID() returns true.
-   */
-  @Test
-  public void testIsValidPPID() {
-    searchCust.setPPID("1234567890");
-    boolean result = searchCust.isValidPPID();
-    assertTrue(result);
-  }
-
-  /**
-   * Test Case ID: UTest-isValidPPID-002
-   * Requirement: REQ-8 The account’s passport ID input field in the Airline
-   * Reservation Software shall accept only alphanumeric and '<' characters.
-   * Purpose: To test that the input passed contains invalid characters.
-   * Test setup: set the addCustomer object passport ID member field using
-   * method setPPID(). 2 test cases are used as input.
-   * Test Strategy: Equivalence class testing.
-   *  Partition input space as follows:
-   *  - set of passport ID values without any invalid characters
-   *  - set of passport ID values with any invalid characters
-   * All inputs:
-   *  - partition input values: "abz02!9<<<", ""
-   * Input: call method isValidPPID()
-   * Expected output: method isValidPPID() returns false.
-   */
-  @ParameterizedTest
-  @ValueSource(strings = {"abz!029<<<", ""})
-  public void testIsValidPPID(String s) {
-    searchCust.setPPID(s);
-    boolean result = searchCust.isValidPPID();
-    assertFalse(result);
-  }
-
-  /**
-   * Test Case ID: UTest-isValidPhoneNo-001
-   * Requirement: REQ-15 The account’s phone number input field in the
-   * Airline Reservation Software shall accept only numeric characters.
-   * Purpose: To test that the input passed does not contain invalid characters.
-   * Test setup: set the addCustomer object phone number member field using
-   * method setPhoneNo(). 1 test case is used as input.
-   * Test Strategy: Equivalence class testing.
-   *  Partition input space as follows:
-   *  - set of possible phone numbers without any invalid characters
-   *  - set of possible phone numbers with any invalid characters
-   * All inputs:
-   *  - partition input values: "0123456789"
-   * Input: call method isValidPhoneNo()
-   * Expected output: method isValidPhoneNo() returns true.
-   */
-  @Test
-  public void testIsValidPhoneNo() {
-    searchCust.setPhoneNo("0123456789");
-    boolean result = searchCust.isValidPhoneNo();
-    assertTrue(result);
-  }
-
-  /**
-   * Test Case ID: UTest-isValidPhoneNo-002
-   * Requirement: REQ-15 The account’s phone number input field in the
-   * Airline Reservation Software shall accept only numeric characters.
-   * Purpose: To test that the input passed contains invalid characters.
-   * Test setup: set the addCustomer object phone number member field using
-   * method setPhoneNo(). 2 test cases are used as input.
-   * Test Strategy: Equivalence class testing.
-   *  Partition input space as follows:
-   *  - set of possible phone numbers without any invalid characters
-   *  - set of possible phone numbers with any invalid characters
-   * All inputs:
-   *  - partition input values: "012345a789", ""
-   * Input: call method isValidPhoneNo()
-   * Expected output: method isValidPhoneNo() returns false.
-   */
-  @ParameterizedTest
-  @ValueSource(strings = {"012345a789", ""})
-  public void testIsValidPhoneNo(String s) {
-    searchCust.setPhoneNo(s);
-    boolean result = searchCust.isValidPhoneNo();
-    assertFalse(result);
-  }
-
-
+    
+    @BeforeEach
+    public void setUp(){
+        desktop.getDesktop().add(searchCust);
+        searchCust.show();
+    }
+    
+    @AfterEach
+    public void tearDown(){
+        desktop.getDesktop().remove(searchCust);
+    }
+    
+    /**
+     * Test Case ID: UTest-searchCustomer-001
+     * Requirement: REQ-19 The booking agent shall search for a customer account
+     * by using the customer account’s ID as search input.
+     * Purpose: To test that the SW can find the customer in the DB given the 
+     * customer account's ID.
+     * Test setup: create a new insert query and remove the test record after
+     * testing is done. 
+     * Test Strategy: Output equivalence class testing.
+     *  Partition output space as follows:
+     *  - customer is found
+     *  - customer is not found
+     * Input: user enters "CS005" in search box. call method
+     * findButtonActionPerformed()
+     * Expected state: customer NIC no. field in searchCustomer tab is displayed
+     * Specifically: 9876543210
+     */
+    @Test
+    public void testFindCustomer() {
+        searchCust.setCustIdTxt("CS005");
+        searchCust.getFindButton().doClick();
+        assertEquals("9876543210", searchCust.getTxtNic());
+    }
+    
+    /**
+     * Test Case ID: UTest-validCustomerIDUpdateInput-001
+     * Requirement: REQ-49 The booking agent shall update the customer’s account
+     * information that has been displayed as a result of the agent’s search
+     * query, which is outlined in this statement’s dependencies.
+     * Purpose: To test that the SW is able to find an existing customer and 
+     * displays all details pertaining to that customer.
+     * Test setup: Open a search customer tab virtually in memory. 
+     * Test Strategy: Pairwise testing with best fit orthogonal array 
+     * Input: enter the following data in each test case (record)
+     * specifically:
+     * gender   NIC   FN      LN     PPID   Addr   dob   phone#  img
+     |  male  |unique|vald  |vald  |vald  |vald  |vald  |vald  |vald|  
+     |female  |unique|vald  |vald  |vald  |vald  |vald  |vald  |vald|
+     * Expected state: The desktop shall be in the 'Registrated user updated.'
+     * state.
+     */
+    @ParameterizedTest
+    @ValueSource(strings = {"0", "1"})
+    public void testValidCustomerIDUpdate(String choice) {
+        byte [] blob = {00000000};
+        String testNIC = "098745632"+choice;        
+        searchCust.fillSearchCustomer("CS006","dave","smith",testNIC,"11<<59","over there", "2000-01-01", choice, "1234567892", blob);
+        searchCust.getUpdateButton().doClick();
+        assertEquals("Registation Updated.", searchCust.updateMsg);
+    }
+    
+    /**
+     * Test Case ID: UTest-validCustomerIDUpdateInput-002
+     * Requirement: REQ-49 The booking agent shall update the customer’s account
+     * information that has been displayed as a result of the agent’s search
+     * query, which is outlined in this statement’s dependencies.
+     * Purpose: To test that the SW is able to find an existing customer and 
+     * displays all details pertaining to that customer.
+     * Test setup: Open a search customer tab virtually in memory. 
+     * Test Strategy: Pairwise testing with best fit orthogonal array 
+     * Input: enter the following data in each test case (record)
+     * specifically:
+     * gender   NIC     FN      LN      PPID    Addr    dob    phone#   img     expected output
+        none	unique	vld	vld	vld	vld	vld	vld	vld     fail
+        none	invld	vld	vld	vld	invld	invld	invld	invld   fail
+        none	taken	invld	invld	invld	vld	vld	vld	invld   fail
+        none	unique	invld	invld	invld	invld	invld	invld	vld     fail
+        male	unique	vld	invld	invld	vld	invld	invld	vld     fail
+        male	invld	vld	invld	invld	invld	vld	vld	invld   fail
+        male	taken	invld	vld	vld	vld	invld	invld	invld   fail
+        male	taken	invld	vld	vld	invld	vld	vld	vld     fail
+        female	unique	invld	vld	invld	invld	vld	invld	invld   fail
+        female	invld	invld	vld	invld	vld	invld	vld	vld     fail
+        female	taken	vld	invld	vld	invld	vld	invld	vld     fail
+        female	invld	vld	invld	vld	vld	invld	vld	invld   fail
+        both	unique	invld	invld	vld	invld	invld	vld	invld   fail
+        both	invld	invld	invld	vld	vld	vld	invld	vld     fail
+        both	taken	vld	vld	invld	invld	invld	vld	vld     fail
+        both	invld	vld	vld	invld	vld	vld	invld	invld   fail
+     * 'fail' means not all update fields were updated because
+     * one or more fields were invalid, incorrect or empty.
+     * Expected state: The desktop shall be in the 'Not all fields were updated'
+     * state.
+     * 100% statement + branch
+     */
+    @ParameterizedTest
+    @MethodSource("tc2Provider")
+    public void testValidCustomerIDUpdateNeg(String[] args) {
+        byte[] blob = {00000000};
+        if(args[8].equals("2")){
+            blob = new byte[0];
+        }
+        searchCust.fillSearchCustomer("CS006", args[2],args[3],args[1],args[4],
+                args[5], args[6], args[0], args[7], blob);
+        searchCust.getUpdateButton().doClick();
+        assertEquals("Not all fields were updated", searchCust.updateMsg);
+    }
+    
+    static Stream<Arguments> tc2Provider() {
+        String nic = "6278465824";
+        String badnic = "9876543210";
+        String inic = "3f4";
+        String fn = "john-k";
+        String ifn = "jack$";
+        String ppid = "1<<2";
+        String ippid = "1>g4";
+        String addr = "there";
+        String iaddr = "";
+        DateFormat da = new SimpleDateFormat("yyyy-MM-dd");
+        String dob = da.format(new java.util.Date());
+        String idob = "5xf16h8248";
+        String pn = "1234567890";
+        String ipn = "1-800-granola";
+        String blob = "1";
+        String iblob = "2";
+        return Stream.of(
+            Arguments.of((Object) new String[]{"-1", nic, fn, fn, ppid, addr, dob, pn, blob}),
+            Arguments.of((Object) new String[]{"-1", inic, fn, fn, ppid, iaddr, idob, ipn, iblob}),
+            Arguments.of((Object) new String[]{"-1", badnic, ifn, ifn, ippid, addr, dob, pn, iblob}),
+            Arguments.of((Object) new String[]{"-1", nic, ifn, ifn, ippid, iaddr, idob, ipn, blob}),
+            Arguments.of((Object) new String[]{"0", nic, fn, ifn, ippid, addr, idob, ipn, blob}),
+            Arguments.of((Object) new String[]{"0", inic, fn, ifn, ippid, iaddr, dob, pn, iblob}),
+            Arguments.of((Object) new String[]{"0", badnic, ifn, fn, ppid, addr, idob, ipn, iblob}),
+            Arguments.of((Object) new String[]{"0", badnic, ifn, fn, ppid, iaddr, dob, pn, blob}),
+            Arguments.of((Object) new String[]{"1", nic, ifn, fn, ippid, iaddr, dob, ipn, iblob}),
+            Arguments.of((Object) new String[]{"1", inic, ifn, fn, ippid, addr, idob, pn, blob}),
+            Arguments.of((Object) new String[]{"1", badnic, fn, ifn, ppid, iaddr, dob, ipn, blob}),
+            Arguments.of((Object) new String[]{"1", inic, fn, ifn, ppid, addr, idob, pn, iblob}),
+            Arguments.of((Object) new String[]{"2", nic, ifn, ifn, ppid, iaddr, idob, pn, iblob}),
+            Arguments.of((Object) new String[]{"2", inic, ifn, ifn, ppid, addr, dob, ipn, blob}),
+            Arguments.of((Object) new String[]{"2", badnic, fn, fn, ippid, iaddr, idob, pn, blob}),
+            Arguments.of((Object) new String[]{"2", inic, fn, fn, ippid, addr, dob, ipn, iblob})
+        );
+    }
 }
+
+

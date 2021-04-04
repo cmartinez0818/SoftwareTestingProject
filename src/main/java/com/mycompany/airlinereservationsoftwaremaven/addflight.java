@@ -230,7 +230,7 @@ public class addflight extends javax.swing.JInternalFrame {
     {
         try {
             Class.forName("com.mysql.jdbc.Driver");
-            con = DriverManager.getConnection("jdbc:mysql://localhost/mysql","root","");
+            con = DriverManager.getConnection("jdbc:mysql://localhost/airline","root","");
             Statement s = con.createStatement();
             ResultSet rs = s.executeQuery("select MAX(id) from flight");
             rs.next();
@@ -292,7 +292,7 @@ public class addflight extends javax.swing.JInternalFrame {
       
         try {
             Class.forName("com.mysql.jdbc.Driver");
-             con = DriverManager.getConnection("jdbc:mysql://localhost/mysql","root","");
+             con = DriverManager.getConnection("jdbc:mysql://localhost/airline","root","");
             pst = con.prepareStatement("insert into flight(id,flightname,source,depart,date,deptime,arrtime,flightcharge)values(?,?,?,?,?,?,?,?)");
             
             pst.setString(1, id);

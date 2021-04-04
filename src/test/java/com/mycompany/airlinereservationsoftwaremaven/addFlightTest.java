@@ -22,7 +22,7 @@ public class addFlightTest {
     addFlight = new addflight();
     try{
       Class.forName("com.mysql.cj.jdbc.Driver");
-      con = DriverManager.getConnection("jdbc:mysql://localhost/mysql","root","");
+      con = DriverManager.getConnection("jdbc:mysql://localhost/airline","root","");
     }catch(SQLException e){
       e.printStackTrace();
     } catch (ClassNotFoundException e) {
