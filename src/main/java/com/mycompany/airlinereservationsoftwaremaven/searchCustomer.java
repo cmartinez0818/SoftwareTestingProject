@@ -1,6 +1,5 @@
 package com.mycompany.airlinereservationsoftwaremaven;
 
-
 import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
@@ -38,10 +37,12 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 
 public class searchCustomer extends javax.swing.JInternalFrame {
   
-    /**
-     * Creates new form addCustomer
-     */
-    public searchCustomer() {
+    public searchCustomer(){
+        this(null);
+    }
+    
+    public searchCustomer(SearchCustomerService scs) {
+        service = scs;
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
             con = DriverManager.getConnection("jdbc:mysql://localhost/airline","root","");       
@@ -53,25 +54,28 @@ public class searchCustomer extends javax.swing.JInternalFrame {
         }
     }
     
-    public void fillSearchCustomer(String id, String fn, String ln, String nic, String ppid, String addr, String gender, String phone, byte[] blob) {
+    public void fillSearchCustomer(String id, String fn, String ln, String nic, String ppid, String addr, String dob, String gender, String phone, byte[] blob) {
         txtcustid.setText(id);
         txtfirstname.setText(fn);
         txtlastname.setText(ln);
         txtnic.setText(nic);
         txtpassport.setText(ppid);
         txtaddress.setText(addr);
-        if(gender.equals("-1")){//no selection
+        try{
+            Date date = new SimpleDateFormat("yyyy-MM-dd").parse(dob);
+            dobField.setDate(date);
+        }catch(ParseException e){
+            dobField.setDate(null);
+        }
+        if(gender.equals("-1")||gender.equals("2")){//no selection or both
             r1.setSelected(false);
             r2.setSelected(false);
         }else if(gender.equals("0")){//male
             r1.setSelected(true);
-            r2.setSelected(false);
+            //r2.setSelected(false);
         }else if(gender.equals("1")){//female
             r2.setSelected(true);
-            r1.setSelected(false);
-        }else if(gender.equals("2")){//both
-            r2.setSelected(true);
-            r1.setSelected(true);
+            //r1.setSelected(false);
         }
         txtcontact.setText(phone);
         userimage = blob;
@@ -82,8 +86,9 @@ public class searchCustomer extends javax.swing.JInternalFrame {
         txtphoto.setIcon(newImage);
     }
     
-   Connection con;
+    Connection con;
     PreparedStatement pst;
+    SearchCustomerService service;
     
     String updateMsg;
     String findState;
@@ -123,6 +128,7 @@ public class searchCustomer extends javax.swing.JInternalFrame {
         r1 = new javax.swing.JRadioButton();
         r2 = new javax.swing.JRadioButton();
         txtcontact = new javax.swing.JTextField();
+        dobField = new com.toedter.calendar.JDateChooser();
         txtphoto = new javax.swing.JLabel();
         jButton1 = new javax.swing.JButton();
         updateButton = new javax.swing.JButton();
@@ -151,18 +157,6 @@ public class searchCustomer extends javax.swing.JInternalFrame {
         jLabel5.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         jLabel5.setForeground(new java.awt.Color(255, 255, 255));
         jLabel5.setText("Address");
-
-        txtlastname.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtlastnameActionPerformed(evt);
-            }
-        });
-
-        txtpassport.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtpassportActionPerformed(evt);
-            }
-        });
 
         txtaddress.setColumns(20);
         txtaddress.setRows(5);
@@ -242,8 +236,18 @@ public class searchCustomer extends javax.swing.JInternalFrame {
         jLabel10.setText("Contact");
 
         r1.setText("Male");
+        r1.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                r1StateChanged(evt);
+            }
+        });
 
         r2.setText("Female");
+        r2.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                r2StateChanged(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -251,8 +255,11 @@ public class searchCustomer extends javax.swing.JInternalFrame {
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGap(22, 22, 22)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel8)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addComponent(jLabel8)
+                        .addGap(18, 18, 18)
+                        .addComponent(dobField, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel9)
@@ -270,7 +277,9 @@ public class searchCustomer extends javax.swing.JInternalFrame {
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGap(37, 37, 37)
-                .addComponent(jLabel8)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel8)
+                    .addComponent(dobField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel9)
@@ -280,7 +289,7 @@ public class searchCustomer extends javax.swing.JInternalFrame {
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel10)
                     .addComponent(txtcontact, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(108, Short.MAX_VALUE))
+                .addContainerGap(114, Short.MAX_VALUE))
         );
 
         txtphoto.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
@@ -377,18 +386,8 @@ public class searchCustomer extends javax.swing.JInternalFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     
-    private void txtlastnameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtlastnameActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtlastnameActionPerformed
-
-    private void txtpassportActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtpassportActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtpassportActionPerformed
-
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        // TODO add your handling code here:
         
-    
       
         try {
         JFileChooser picchooser = new JFileChooser();
@@ -417,7 +416,7 @@ public class searchCustomer extends javax.swing.JInternalFrame {
               
               
         } catch (IOException ex) {
-            Logger.getLogger(addCustomer.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(searchCustomer.class.getName()).log(Level.SEVERE, null, ex);
         }
         
         
@@ -433,21 +432,8 @@ public class searchCustomer extends javax.swing.JInternalFrame {
         String passport = txtpassport.getText();
         String address = txtaddress.getText();
         
-        DateFormat da = new SimpleDateFormat("yyyy-MM-dd");
-        String date = da.format(new java.util.Date()/*txtdob.getDate()*/);
-        String Gender;
-        
-        if(r1.isSelected())
-        {
-            Gender = "Male";
-        }
-        else
-        {
-            Gender = "FeMale";
-        }
-        
-        String contact = txtcontact.getText();
-        
+        String txtdob = getDoB();
+        String contact = txtcontact.getText();        
         
          
         try {
@@ -468,12 +454,8 @@ public class searchCustomer extends javax.swing.JInternalFrame {
                     PreparedStatement pstFN = con.prepareStatement("update customer set nic = ? where id = ?");
                     pstFN.setString(1, nic);
                     stmts.add(pstFN);
-                }else{
-                    allIsUpdated = false;
-                }                
-            }else if(!nic.isEmpty()){
-                allIsUpdated = false;
-            }
+                }else allIsUpdated = false;              
+            }else allIsUpdated = false;
             if(isValidPPID()){
                 PreparedStatement pstFN = con.prepareStatement("update customer set passport = ? where id = ?");
                 pstFN.setString(1, passport);
@@ -489,9 +471,9 @@ public class searchCustomer extends javax.swing.JInternalFrame {
                 pstFN.setString(1, address);
                 stmts.add(pstFN);
             }else allIsUpdated = false;
-            if(!date.isEmpty()){
+            if(!txtdob.isEmpty()){
                 PreparedStatement pstFN = con.prepareStatement("update customer set dob = ? where id = ?");
-                pstFN.setString(1, date);
+                pstFN.setString(1, txtdob);
                 stmts.add(pstFN);
             }else allIsUpdated = false;
             if((r1.isSelected()&&!r2.isSelected())||(!r1.isSelected()&&r2.isSelected())){
@@ -513,13 +495,15 @@ public class searchCustomer extends javax.swing.JInternalFrame {
             for(PreparedStatement psmt:stmts){
                 psmt.setString(2, id);
                 psmt.executeUpdate();
-            }      
-            String msg = "Registation Updated.";
-            JOptionPane.showMessageDialog(null,msg);
-            updateMsg = allIsUpdated ? msg : "Not all fields were updated";
+                psmt.close();
+                execUpdateCalled();
+            }  
+            String msg = allIsUpdated ? "Registration updated." : "Not all fields were updated.";
+            updateMsg = msg;
+            msg = showRegistrationUpdatedMsg(msg);
             
         } catch (SQLException ex) {
-            Logger.getLogger(addCustomer.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(searchCustomer.class.getName()).log(Level.SEVERE, null, ex);
         }
         
         
@@ -532,10 +516,8 @@ public class searchCustomer extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void findButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_findButtonActionPerformed
-        // TODO add your handling code here:
         
-        String id = txtcustid.getText();
-        
+        String id = txtcustid.getText();        
         
         try {            
             pst = con.prepareStatement("select * from customer where id = ?");
@@ -544,9 +526,7 @@ public class searchCustomer extends javax.swing.JInternalFrame {
             
             if(rs.next() == false)
             {
-                String msg = "Customer not found.";
-                JOptionPane.showMessageDialog(this, msg);
-                findState = msg;
+                showCustNotFoundMsg();
             }
             else
             {
@@ -594,8 +574,7 @@ public class searchCustomer extends javax.swing.JInternalFrame {
                   txtpassport.setText(passport.trim());
                   txtaddress.setText(address.trim());
                   txtcontact.setText(contact.trim());
-                  System.err.println("txtdob is not defined");
-                  //txtdob.setDate(date1);
+                  dobField.setDate(date1);
                   txtphoto.setIcon(newImage);
               
             }
@@ -605,6 +584,18 @@ public class searchCustomer extends javax.swing.JInternalFrame {
         }        
         
     }//GEN-LAST:event_findButtonActionPerformed
+
+    private void r1StateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_r1StateChanged
+        if(r1.isSelected()){
+            r2.setSelected(false);
+        }
+    }//GEN-LAST:event_r1StateChanged
+
+    private void r2StateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_r2StateChanged
+        if(r2.isSelected()){
+            r1.setSelected(false);
+        }
+    }//GEN-LAST:event_r2StateChanged
 
     public String getCustIdTxt(){
         return txtcustid.getText();
@@ -671,6 +662,10 @@ public class searchCustomer extends javax.swing.JInternalFrame {
         return valid;
     }
     
+    public void setNIC(String nic){
+        txtnic.setText(nic);
+    }
+    
     public boolean isValidPPID(){
         String regex = "^[a-zA-Z0-9[<]]+$";
         boolean result = Pattern.matches(regex, txtpassport.getText());
@@ -682,8 +677,33 @@ public class searchCustomer extends javax.swing.JInternalFrame {
         boolean result = Pattern.matches(regex, txtcontact.getText());
         return result;
     }
+    
+    public String getDoB(){
+        DateFormat da = new SimpleDateFormat("yyyy-MM-dd");
+        if(dobField.getDate()==null){
+            return "";
+        }
+        return da.format(dobField.getDate());
+    }    
+    
+    public String showRegistrationUpdatedMsg(String msg){
+        return service.showRegistrationUpdatedMsg(msg);
+        //JOptionPane.showMessageDialog(null,msg);
+        //return msg;
+    }    
+    
+    public void showCustNotFoundMsg() {
+        String msg = "Customer not found.";
+        findState = msg;
+        service.showCustNotFoundMsg();
+        //JOptionPane.showMessageDialog(this, msg);        
+    }
+    public void execUpdateCalled() {
+        service.execUpdateCalled();
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private com.toedter.calendar.JDateChooser dobField;
     private javax.swing.JButton findButton;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton3;

@@ -83,6 +83,7 @@ public class addCustomer extends javax.swing.JInternalFrame {
         r1 = new javax.swing.JRadioButton();
         r2 = new javax.swing.JRadioButton();
         txtcontact = new javax.swing.JTextField();
+        dobField = new com.toedter.calendar.JDateChooser();
         txtphoto = new javax.swing.JLabel();
         jButton1 = new javax.swing.JButton();
         addCustomerBtn = new javax.swing.JButton();
@@ -213,8 +214,11 @@ public class addCustomer extends javax.swing.JInternalFrame {
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGap(22, 22, 22)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel8)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addComponent(jLabel8)
+                        .addGap(18, 18, 18)
+                        .addComponent(dobField, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel9)
@@ -231,8 +235,10 @@ public class addCustomer extends javax.swing.JInternalFrame {
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(37, 37, 37)
-                .addComponent(jLabel8)
+                .addGap(31, 31, 31)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jLabel8)
+                    .addComponent(dobField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel9)
@@ -242,7 +248,7 @@ public class addCustomer extends javax.swing.JInternalFrame {
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel10)
                     .addComponent(txtcontact, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(108, Short.MAX_VALUE))
+                .addContainerGap(120, Short.MAX_VALUE))
         );
 
         txtphoto.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
@@ -432,15 +438,8 @@ public class addCustomer extends javax.swing.JInternalFrame {
         String lastname = txtlastname.getText();
         String nic = txtnic.getText(); 
         String passport = txtpassport.getText();
-        String address = txtaddress.getText();        
-        DateFormat da = new SimpleDateFormat("yyyy-MM-dd");
-        String date;
-        if(txtdob!=null){
-            date = da.format(txtdob.getDate());
-        }else{
-            errMsg = "txtdob field does not exist.";
-            return;
-        }
+        String address = txtaddress.getText();
+        String date = getDate();        
         String Gender;
         
         if(r1.isSelected())
@@ -540,6 +539,14 @@ public class addCustomer extends javax.swing.JInternalFrame {
         return result;
     }
     
+    public String getDate(){
+        DateFormat da = new SimpleDateFormat("yyyy-MM-dd");
+        if(dobField.getDate()==null){
+            return "";
+        }
+        return da.format(dobField.getDate());
+    }
+    
     public void setTxtFirstName(String txt){
         txtfirstname.setText(txt);
     }
@@ -572,6 +579,7 @@ public class addCustomer extends javax.swing.JInternalFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton addCustomerBtn;
     private javax.swing.JButton cancelButton;
+    private com.toedter.calendar.JDateChooser dobField;
     private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
@@ -595,7 +603,6 @@ public class addCustomer extends javax.swing.JInternalFrame {
     private javax.swing.JTextField txtnic;
     private javax.swing.JTextField txtpassport;
     private javax.swing.JLabel txtphoto;
-    private java.util.Date txtdob;
     // End of variables declaration//GEN-END:variables
 
 }
