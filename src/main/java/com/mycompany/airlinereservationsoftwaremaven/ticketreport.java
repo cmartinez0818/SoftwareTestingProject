@@ -7,7 +7,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
-import java.util.Vector;
+import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.table.DefaultTableModel;
@@ -92,6 +92,9 @@ PreparedStatement pst;
         this.hide();
     }//GEN-LAST:event_jButton1ActionPerformed
 
+    public static Vector testVector = new Vector();
+
+
 
     public void LoadData()
     {
@@ -125,12 +128,14 @@ PreparedStatement pst;
                  }
                  
                  Df.addRow(v2);
-                 
-              
-                 
-                 
+
+
+               //System.out.print(v2);
+               //v2.toString();
+               testVector.addAll(v2);
+
              }
-             
+
              
              
              
