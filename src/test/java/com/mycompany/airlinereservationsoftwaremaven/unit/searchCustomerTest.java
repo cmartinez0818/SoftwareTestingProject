@@ -1,5 +1,9 @@
-package com.mycompany.airlinereservationsoftwaremaven;
+package com.mycompany.airlinereservationsoftwaremaven.unit;
 
+import com.mycompany.airlinereservationsoftwaremaven.Main;
+import com.mycompany.airlinereservationsoftwaremaven.SearchCustomerService;
+import com.mycompany.airlinereservationsoftwaremaven.addCustomer;
+import com.mycompany.airlinereservationsoftwaremaven.searchCustomer;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -30,7 +34,17 @@ public class searchCustomerTest {
     @BeforeAll
     public static void setUpClass(){
         desktop = new Main();
-        searchCust = new searchCustomer();
+        SearchCustomerService searchFake = new SearchCustomerService() {
+            @Override
+            public void showCustNotFoundMsg() {}
+
+            @Override
+            public void execUpdateCalled() {}
+
+            @Override
+            public String showRegistrationUpdatedMsg(String msg) {return "";}
+        };
+        searchCust = new searchCustomer(searchFake);
         desktop.add(searchCust).setVisible(true);
         String query1 = "INSERT INTO Customer (ID,nic,firstname,lastname,passport,address,dob,gender,contact,photo)"
                     + " VALUES('CS005','9876543210','Johnny','Last','1<3<2','123 there','2000-05-01','Male',987,00000000);";
@@ -116,7 +130,7 @@ public class searchCustomerTest {
      * gender   NIC   FN      LN     PPID   Addr   dob   phone#  img
      |  male  |unique|vald  |vald  |vald  |vald  |vald  |vald  |vald|  
      |female  |unique|vald  |vald  |vald  |vald  |vald  |vald  |vald|
-     * Expected state: The desktop shall be in the 'Registrated user updated.'
+     * Expected state: The desktop shall be in the 'Registration updated.'
      * state.
      */
     @ParameterizedTest
@@ -125,8 +139,12 @@ public class searchCustomerTest {
         byte [] blob = {00000000};
         String testNIC = "098745632"+choice;        
         searchCust.fillSearchCustomer("CS006","dave","smith",testNIC,"11<<59","over there", "2000-01-01", choice, "1234567892", blob);
+        try{
         searchCust.getUpdateButton().doClick();
-        assertEquals("Registation Updated.", searchCust.updateMsg);
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+        assertEquals("Registration updated.", searchCust.getUnitUpdateMsg());
     }
     
     /**
@@ -159,7 +177,7 @@ public class searchCustomerTest {
         both	invld	vld	vld	invld	vld	vld	invld	invld   fail
      * 'fail' means not all update fields were updated because
      * one or more fields were invalid, incorrect or empty.
-     * Expected state: The desktop shall be in the 'Not all fields were updated'
+     * Expected state: The desktop shall be in the 'Not all fields were updated.'
      * state.
      * 100% statement + branch
      */
@@ -173,7 +191,7 @@ public class searchCustomerTest {
         searchCust.fillSearchCustomer("CS006", args[2],args[3],args[1],args[4],
                 args[5], args[6], args[0], args[7], blob);
         searchCust.getUpdateButton().doClick();
-        assertEquals("Not all fields were updated", searchCust.updateMsg);
+        assertEquals("Not all fields were updated.", searchCust.getUnitUpdateMsg());
     }
     
     static Stream<Arguments> tc2Provider() {

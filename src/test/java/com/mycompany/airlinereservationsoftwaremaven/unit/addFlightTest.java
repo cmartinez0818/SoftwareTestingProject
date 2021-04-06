@@ -1,5 +1,6 @@
-package com.mycompany.airlinereservationsoftwaremaven;
+package com.mycompany.airlinereservationsoftwaremaven.unit;
 
+import com.mycompany.airlinereservationsoftwaremaven.addflight;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.sql.Connection;

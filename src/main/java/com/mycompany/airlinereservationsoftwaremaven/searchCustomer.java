@@ -90,11 +90,19 @@ public class searchCustomer extends javax.swing.JInternalFrame {
     PreparedStatement pst;
     SearchCustomerService service;
     
-    String updateMsg;
+    String intUpdateMsg;
+    String unitUpdateMsg;
     String findState;
     String path=null;
     byte[] userimage=null;
     
+    public String getUnitUpdateMsg(){
+        return unitUpdateMsg;
+    }
+    
+    public String getIntUpdateMsg(){
+        return intUpdateMsg;
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -499,8 +507,9 @@ public class searchCustomer extends javax.swing.JInternalFrame {
                 execUpdateCalled();
             }  
             String msg = allIsUpdated ? "Registration updated." : "Not all fields were updated.";
-            updateMsg = msg;
-            msg = showRegistrationUpdatedMsg(msg);
+            unitUpdateMsg = msg;            
+            intUpdateMsg = showRegistrationUpdatedMsg(msg);
+            intUpdateMsg = msg;
             
         } catch (SQLException ex) {
             Logger.getLogger(searchCustomer.class.getName()).log(Level.SEVERE, null, ex);
@@ -699,7 +708,9 @@ public class searchCustomer extends javax.swing.JInternalFrame {
         //JOptionPane.showMessageDialog(this, msg);        
     }
     public void execUpdateCalled() {
-        service.execUpdateCalled();
+        try {
+            service.execUpdateCalled();
+        } catch (Exception e) {}
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
