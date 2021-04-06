@@ -146,8 +146,7 @@ PreparedStatement pst;
         } catch (SQLException ex) {
             Logger.getLogger(ticket.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
-        
+
         
     }
     

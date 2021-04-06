@@ -5,6 +5,8 @@
  */
 package com.mycompany.airlinereservationsoftwaremaven;
 
+import com.mycompany.airlinereservationsoftwaremaven.Main;
+import com.mycompany.airlinereservationsoftwaremaven.addCustomer;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;

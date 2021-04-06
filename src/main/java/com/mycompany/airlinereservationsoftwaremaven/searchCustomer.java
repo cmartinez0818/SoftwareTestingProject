@@ -90,7 +90,7 @@ public class searchCustomer extends javax.swing.JInternalFrame {
     PreparedStatement pst;
     SearchCustomerService service;
     
-    String updateMsg;
+    public String updateMsg;
     String findState;
     String path=null;
     byte[] userimage=null;

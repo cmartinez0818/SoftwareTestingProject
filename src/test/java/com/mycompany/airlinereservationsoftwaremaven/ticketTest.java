@@ -2,6 +2,7 @@ package com.mycompany.airlinereservationsoftwaremaven;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import com.mycompany.airlinereservationsoftwaremaven.ticket;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -13,7 +14,7 @@ import org.junit.jupiter.params.provider.ValueSource;
 
 public class ticketTest {
 
-    private static ticket ticket;
+    private static com.mycompany.airlinereservationsoftwaremaven.ticket ticket;
     private static Connection con;
 
     public ticketTest() {

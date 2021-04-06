@@ -30,6 +30,16 @@ import javax.swing.table.DefaultTableModel;
 
 public class ticket extends javax.swing.JInternalFrame {
 
+    Connection con;
+    PreparedStatement pst;
+    ticketService ticketService;
+
+    //public String updateMsg;
+    //String findState;
+    //String path=null;
+    //byte[] userimage=null;
+
+
     /**
      * Creates new form ticket
      */
@@ -38,8 +48,18 @@ public class ticket extends javax.swing.JInternalFrame {
         autoID();
     }
 
-    Connection con;
-    PreparedStatement pst;
+    public ticket(ticketService scs) {
+        ticketService = scs;
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            con = DriverManager.getConnection("jdbc:mysql://localhost/airline","root","");
+            initComponents();
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(ticket.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SQLException ex) {
+            Logger.getLogger(ticket.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
     
     /**
      * This method is called from within the constructor to initialize the form.
@@ -510,12 +530,12 @@ public class ticket extends javax.swing.JInternalFrame {
                 
             }
             
-            
+
             
         } catch (ClassNotFoundException ex) {
-            Logger.getLogger(addCustomer.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ticket.class.getName()).log(Level.SEVERE, null, ex);
         } catch (SQLException ex) {
-            Logger.getLogger(addCustomer.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ticket.class.getName()).log(Level.SEVERE, null, ex);
         }
     
     
@@ -699,19 +719,55 @@ public class ticket extends javax.swing.JInternalFrame {
         boolean result = Pattern.matches(regex, flightno.getText());
         return result;
     }
+
     public void setFLTID(String fltid) {
         flightno.setText(fltid);
     }
-
     public String getFLTID() {
         flightno.getText();
-        return String.valueOf(flightno.getText());
+        return flightno.getText();
+    }
+
+
+    public void setTID(String tid) {
+        txtticketno.setText(tid);
+    }
+    public String getTID() {
+        txtticketno.getText();
+        return txtticketno.getText();
+    }
+
+    public void setCID(String cid) {
+        txtcustid.setText(cid);
+    }
+
+    public String getCustFirstName() {
+        //txtfirstname.getText();
+        return txtfirstname.getText();
     }
 
     public javax.swing.JButton getUpdateButton(){
         return jButton1;
     }
 
+    public javax.swing.JButton getTicketSearchButton() {
+        return jButton3;
+    }
+
+    public javax.swing.JButton getSearchCustInfoButton() {
+        return jButton4;
+    }
+
+    public String showRegistrationUpdatedMsg(String msg){
+        return ticketService.showRegistrationUpdatedMsg(msg);
+        //JOptionPane.showMessageDialog(null,msg);
+        //return msg;
+    }
+
+
+    public void execUpdateCalled() {
+        ticketService.execUpdateCalled();
+    }
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
