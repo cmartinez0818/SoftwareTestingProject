@@ -1,5 +1,6 @@
-package com.mycompany.airlinereservationsoftwaremaven;
+package com.mycompany.airlinereservationsoftwaremaven.integration;
 
+import com.mycompany.airlinereservationsoftwaremaven.ticketreport;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 

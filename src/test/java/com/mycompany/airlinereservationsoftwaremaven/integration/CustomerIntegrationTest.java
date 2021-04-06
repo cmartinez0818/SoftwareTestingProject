@@ -1,5 +1,8 @@
-package com.mycompany.airlinereservationsoftwaremaven;
+package com.mycompany.airlinereservationsoftwaremaven.integration;
 
+import com.mycompany.airlinereservationsoftwaremaven.Main;
+import com.mycompany.airlinereservationsoftwaremaven.SearchCustomerService;
+import com.mycompany.airlinereservationsoftwaremaven.searchCustomer;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -154,10 +157,10 @@ public class CustomerIntegrationTest {
         //8 because the NIC is not changed, and is in use by the record we got
         verify(service, times(8)).execUpdateCalled();
         String msg = "Not all fields were updated.";        
-        when(service.showRegistrationUpdatedMsg(searchCust.updateMsg))
-                .thenReturn(searchCust.updateMsg);
+        when(service.showRegistrationUpdatedMsg(searchCust.getIntUpdateMsg()))
+                .thenReturn(searchCust.getIntUpdateMsg());
         doNothing().when(service).execUpdateCalled();
-        assertEquals(msg, searchCust.showRegistrationUpdatedMsg(searchCust.updateMsg));     
+        assertEquals(msg, searchCust.showRegistrationUpdatedMsg(searchCust.getIntUpdateMsg()));     
     }
     
     /**
@@ -185,11 +188,11 @@ public class CustomerIntegrationTest {
         searchCust.setNIC("8888888888");
         searchCust.getUpdateButton().doClick();
         verify(service, times(9)).execUpdateCalled();
-        String msg = "Registration updated.";        
-        when(service.showRegistrationUpdatedMsg(searchCust.updateMsg))
-                .thenReturn(searchCust.updateMsg);
+        String msg = "Registration updated.";
+        when(service.showRegistrationUpdatedMsg(searchCust.getIntUpdateMsg()))
+                .thenReturn(searchCust.getIntUpdateMsg());
         doNothing().when(service).execUpdateCalled();
-        assertEquals(msg, searchCust.showRegistrationUpdatedMsg(searchCust.updateMsg)); 
+        assertEquals(msg, searchCust.showRegistrationUpdatedMsg(searchCust.getIntUpdateMsg())); 
     }
     
 }

@@ -1,4 +1,4 @@
-package com.mycompany.airlinereservationsoftwaremaven;
+package com.mycompany.airlinereservationsoftwaremaven.unit;
 
 import static org.junit.jupiter.api.Assertions.*;
 /*
