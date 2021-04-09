@@ -59,7 +59,7 @@ public class ticketReportIntegrationTest {
    * Input: Multiple ticket instances inside of ticket table.
    * Expected state: The ticket report LoadData() method creates a report from the sql ticket table.
    */
-  @Test
+  //@Test
   public void autoIdTest() {
     ticketreport testReport = new ticketreport();
     testReport.LoadData();

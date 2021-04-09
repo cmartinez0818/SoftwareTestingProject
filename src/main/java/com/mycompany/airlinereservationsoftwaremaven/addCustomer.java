@@ -205,8 +205,18 @@ public class addCustomer extends javax.swing.JInternalFrame {
         jLabel10.setText("Contact");
 
         r1.setText("Male");
+        r1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                r1ActionPerformed(evt);
+            }
+        });
 
         r2.setText("Female");
+        r2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                r2ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -497,6 +507,14 @@ public class addCustomer extends javax.swing.JInternalFrame {
         this.hide();
     }//GEN-LAST:event_cancelButtonActionPerformed
 
+    private void r1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_r1ActionPerformed
+        r2.setSelected(false);
+    }//GEN-LAST:event_r1ActionPerformed
+
+    private void r2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_r2ActionPerformed
+        r1.setSelected(false);
+    }//GEN-LAST:event_r2ActionPerformed
+
     public boolean isValidFirstName(){        
         String regex = "^[a-zA-Z[-]]{1,64}$";
         boolean valid = Pattern.matches(regex, txtfirstname.getText());        
@@ -574,6 +592,16 @@ public class addCustomer extends javax.swing.JInternalFrame {
     public javax.swing.JButton getAddButton() {
         javax.swing.JButton obj = addCustomerBtn;
         return obj;
+    }
+    
+    //get radio button for male option
+    public javax.swing.JRadioButton getMaleR(){
+        return r1;
+    }
+    
+    //get radio button for female option
+    public javax.swing.JRadioButton getFemaleR(){
+        return r2;
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

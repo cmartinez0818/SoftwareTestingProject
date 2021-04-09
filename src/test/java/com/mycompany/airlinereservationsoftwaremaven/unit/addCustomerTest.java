@@ -547,7 +547,7 @@ public class addCustomerTest {
         }
     }
     
-        /**
+    /**
      * Test Case ID: UTest-invalidCustomerCreationInput-002
      * Requirement: REQ-49 Upon any invalid input, the Airline Reservation 
      * software shall display where in the GUI invalid input occurred.
@@ -570,5 +570,56 @@ public class addCustomerTest {
         addBtn.doClick();
         String msg = "Invalid NIC input. Enter exactly 10 digits only.";
         assertEquals(msg, addCust.errMsg);
+    }
+    
+    /**
+     * Test Case ID: UTest-selectGenderTest-001
+     * Requirement: REQ-12 The account’s gender input field in the Airline
+     * Reservation Software shall accept one of only two options: ‘male’ and
+     * ‘female’.
+     * Purpose: To test that the user cannot select both male and female options
+     * simultaneously.
+     * Test setup: Open an add customer tab virtually in memory. 
+     * Test Strategy: Equivalence class testing
+     * Partitions:
+     * 1. select Male when none selected
+     * 2. select Female when none selected
+     * 3. select Male when Female selected
+     * 4. select Female when Male selected
+     * Input: either Male or Female are selected, or both unselected
+     * Expected state: 1,3: only male is selected
+     * 2,4: only female is selected
+     */
+    @ParameterizedTest
+    @ValueSource(ints = {1, 2, 3, 4})
+    public void testMaleFemaleInput(int c) {
+        switch(c){
+            //select male, none selected
+            case 1: 
+                addCust.getMaleR().doClick();
+                assertTrue(addCust.getMaleR().isSelected());
+                assertFalse(addCust.getFemaleR().isSelected());
+                break;
+            //select female, none selected
+            case 2:
+                addCust.getFemaleR().doClick();
+                assertTrue(addCust.getFemaleR().isSelected());
+                assertFalse(addCust.getMaleR().isSelected());
+                break;
+            //select male, female selected
+            case 3: 
+                addCust.getFemaleR().doClick();
+                addCust.getMaleR().doClick();
+                assertTrue(addCust.getMaleR().isSelected());
+                assertFalse(addCust.getFemaleR().isSelected());
+                break;
+            //select female, male selected
+            case 4:
+                addCust.getMaleR().doClick();
+                addCust.getFemaleR().doClick();
+                assertTrue(addCust.getFemaleR().isSelected());
+                assertFalse(addCust.getMaleR().isSelected());
+                break;
+        }
     }
 }

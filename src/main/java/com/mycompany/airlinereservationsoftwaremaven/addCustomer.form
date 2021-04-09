@@ -375,11 +375,17 @@
           <Properties>
             <Property name="text" type="java.lang.String" value="Male"/>
           </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="r1ActionPerformed"/>
+          </Events>
         </Component>
         <Component class="javax.swing.JRadioButton" name="r2">
           <Properties>
             <Property name="text" type="java.lang.String" value="Female"/>
           </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="r2ActionPerformed"/>
+          </Events>
         </Component>
         <Component class="javax.swing.JTextField" name="txtcontact">
         </Component>
