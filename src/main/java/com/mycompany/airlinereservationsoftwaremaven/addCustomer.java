@@ -89,6 +89,9 @@ public class addCustomer extends javax.swing.JInternalFrame {
         addCustomerBtn = new javax.swing.JButton();
         cancelButton = new javax.swing.JButton();
 
+        setTitle("Add Customer");
+        setName("addCustomer"); // NOI18N
+
         jPanel1.setBackground(new java.awt.Color(51, 0, 255));
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
