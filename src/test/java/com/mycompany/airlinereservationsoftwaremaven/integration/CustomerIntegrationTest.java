@@ -174,7 +174,7 @@ public class CustomerIntegrationTest {
      * Test setup: create a new mock that represents a dialogue informing the
      * customer was not found.
      * Test Strategy: Mock testing
-     * Input: user enters "CS006" in search box. call method
+     * Input: user enters "CS014" in search box. call method
      * findButtonActionPerformed() and updateButtonActionPerformed()
      * Expected state: The update module writes to all 9 fields in a record from
      * the database once. The system also notifies the user that 'Registration 

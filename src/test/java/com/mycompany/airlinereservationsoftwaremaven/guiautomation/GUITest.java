@@ -88,7 +88,7 @@ public class GUITest extends AssertJSwingJUnitTestCase {
             assertNull(ac1);
         }else{
             assertEquals("Customer ID","Customer ID");
-            assertNull("");
+            assertNull(null);
         }
     }
 }
