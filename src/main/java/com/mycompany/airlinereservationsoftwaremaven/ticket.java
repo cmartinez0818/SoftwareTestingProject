@@ -452,8 +452,6 @@ public class ticket extends javax.swing.JInternalFrame {
             pst = con.prepareStatement("SELECT * from flight WHERE source = ? and depart = ?");
 
 
-
-
             pst.setString(1, source);
             pst.setString(2, depart);
             ResultSet rs = pst.executeQuery();
@@ -483,14 +481,7 @@ public class ticket extends javax.swing.JInternalFrame {
 
                 Df.addRow(v2);
 
-
-
-
             }
-
-
-
-
 
 
         } catch (ClassNotFoundException ex) {
@@ -498,12 +489,6 @@ public class ticket extends javax.swing.JInternalFrame {
         } catch (SQLException ex) {
             Logger.getLogger(ticket.class.getName()).log(Level.SEVERE, null, ex);
         }
-
-
-
-
-
-
 
     }//GEN-LAST:event_jButton3ActionPerformed
 
@@ -540,19 +525,6 @@ public class ticket extends javax.swing.JInternalFrame {
 
 
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -674,51 +646,13 @@ public class ticket extends javax.swing.JInternalFrame {
         }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // TODO add your handling code here:
-
         this.hide();
-
     }//GEN-LAST:event_jButton2ActionPerformed
 
-    public boolean validateTicketFirstName(){
-        String regex = "^[a-zA-Z[-]]{1,64}$";
-        boolean valid = Pattern.matches(regex, txtfirstname.getText());
-        return valid;
-    }
-    public void setTicketFirstName(String txt){
-        txtfirstname.setText(txt);
-    }
-
-    public boolean validateTicketFlightName(){
-        String regex = "^[a-zA-Z]{1,64}$";
-        boolean valid = Pattern.matches(regex, flightname.getText());
-        return valid;
-    }
-    public void setTicketFlightName(String ttxt){
-        flightname.setText(ttxt);
-    }
-
-
-    public boolean isValidTicketFlightID(){
-        String regex = "^[a-zA-Z0-9[<]]+$";
-        boolean result = Pattern.matches(regex, flightno.getText());
-        return result;
-    }
 
     public void setFLTID(String fltid) {
         flightno.setText(fltid);
@@ -728,22 +662,42 @@ public class ticket extends javax.swing.JInternalFrame {
         return flightno.getText();
     }
 
-
-    public void setTID(String tid) {
-        txtticketno.setText(tid);
+    public String getPsp() {
+        txtpassport.getText();
+        return txtpassport.getText();
     }
-    public String getTID() {
-        txtticketno.getText();
-        return txtticketno.getText();
+    public String getCustFirstName() {
+        return txtfirstname.getText();
+    }
+    public String getCustLastName() {
+        return txtlastname.getText();
     }
 
     public void setCID(String cid) {
         txtcustid.setText(cid);
     }
+    public void setTicketFirstName(String txt){
+        txtfirstname.setText(txt);
+    }
+    public void setTicketLastName(String last) { txtlastname.setText(last);}
+    public void setDestination(String dest) {
+        txtdepart.setToolTipText(dest);
+    }
+    public void setSource(String sour) {
+        txtsource.setToolTipText(sour);
+    }
+    public void setSeats(String seats) {
+        txtseats.setToolTipText(seats);
+    }
+    public void setPrice(String price) {
+        txtprice.setText(price);
+    }
+    public void setFLID(String FID) {
+        flightno.setText(FID);
+    }
 
-    public String getCustFirstName() {
-        //txtfirstname.getText();
-        return txtfirstname.getText();
+    public String getTotal() {
+        return txttotal.getText();
     }
 
     public javax.swing.JButton getUpdateButton(){
@@ -758,16 +712,6 @@ public class ticket extends javax.swing.JInternalFrame {
         return jButton4;
     }
 
-    public String showRegistrationUpdatedMsg(String msg){
-        return ticketService.showRegistrationUpdatedMsg(msg);
-        //JOptionPane.showMessageDialog(null,msg);
-        //return msg;
-    }
-
-
-    public void execUpdateCalled() {
-        ticketService.execUpdateCalled();
-    }
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

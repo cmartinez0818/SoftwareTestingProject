@@ -321,43 +321,30 @@ public class addflight extends javax.swing.JInternalFrame {
         
     }//GEN-LAST:event_jButton1ActionPerformed
 
-    public boolean validateFlightName(){
-        String regex = "^[a-zA-Z]{1,64}$";
-        boolean valid = Pattern.matches(regex, txtflightname.getText());
-        return valid;
-    }
-    public void setTxtFlightName(String txt){
-        txtflightname.setText(txt);
-    }
 
 
-    public boolean isValidFlightID(){
-        String regex = "^[FO0-9[<]]{1,5}+$";
-        boolean result = Pattern.matches(regex, txtflightid.getText());
-        return result;
-    }
-    public void setFLID(String flid) {
-        txtflightid.setText(flid);
-    }
-
-
-    public boolean validateArrTime(){
-        String regex = "^[APM0-9[.]]+$";
-        boolean valid = Pattern.matches(regex, txtarrtime.getText());
-        return valid;
-    }
     public void setTxtArrTime(String txt){
         txtarrtime.setText(txt);
-    }
-
-    public boolean validateDepTime(){
-        String regex = "^[APM0-9[.]]+$";
-        boolean valid = Pattern.matches(regex, txtdtime.getText());
-        return valid;
     }
     public void setTxtDepTime(String txt){
         txtdtime.setText(txt);
     }
+    public void setTxtFlightName(String txt){
+        txtflightname.setText(txt);
+    }
+    public void setDestination(String dest) {
+        txtdepart.setToolTipText(dest);
+    }
+    public void setSource(String sour) {
+        txtsource.setToolTipText(sour);
+    }
+    public void setPrice(String txt) { txtflightcharge.setText(txt);}
+
+    public javax.swing.JButton getAddFlightButton(){
+        return jButton1;
+    }
+
+
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // TODO add your handling code here:
