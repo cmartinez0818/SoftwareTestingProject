@@ -216,9 +216,17 @@ public class addCustomerTest {
      */
     @Test
     public void testIsUniqueNIC() {
+        try{
+        String setSt = "INSERT INTO Customer (ID,nic,firstname,lastname,passport,address,dob,gender,contact,photo)"
+                    + " VALUES('abc123','9234567890','','','','','','',1,00000000);";
+        Statement setQuery = con.createStatement();
+        setQuery.executeUpdate(setSt);
         addCust.setNIC("1234567890");
         boolean result = addCust.isUniqueNIC();
         assertTrue(result);
+        }catch(SQLException e){
+            e.printStackTrace();
+        }
     }
     
     /**
@@ -483,7 +491,7 @@ public class addCustomerTest {
      */
     @ParameterizedTest
     @ValueSource(strings = {"-1", "001", "997", "998"})
-    public void testAssignUniqueCustomerID(String id) throws InterruptedException {
+    public void testAssignUniqueCustomerID(String id) {
         if(!id.equals("-1")){
             String query = "INSERT INTO Customer (ID,nic,firstname,lastname,passport,address,dob,gender,contact,photo)"
                     + " VALUES('CS"+id+"','1234567890','Johnny','','','','','',1,00000000);";            

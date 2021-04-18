@@ -72,7 +72,7 @@ public class searchCustomerTest {
     public static void tearDownClass(){
         searchCust = null;
         try {
-            String query = "delete from Customer where ID = 'CS005' OR 'CS006'";
+            String query = "delete from Customer where ID = 'CS005' OR ID = 'CS006'";
             Statement st = con.createStatement();
             st.executeUpdate(query);
             con.close();
@@ -118,7 +118,7 @@ public class searchCustomerTest {
     
     /**
      * Test Case ID: UTest-validCustomerIDUpdateInput-001
-     * Requirement: REQ-49 The booking agent shall update the customer’s account
+     * Requirement: REQ-28 The booking agent shall update the customer’s account
      * information that has been displayed as a result of the agent’s search
      * query, which is outlined in this statement’s dependencies.
      * Purpose: To test that the SW is able to find an existing customer and 
@@ -149,7 +149,7 @@ public class searchCustomerTest {
     
     /**
      * Test Case ID: UTest-validCustomerIDUpdateInput-002
-     * Requirement: REQ-49 The booking agent shall update the customer’s account
+     * Requirement: REQ-28 The booking agent shall update the customer’s account
      * information that has been displayed as a result of the agent’s search
      * query, which is outlined in this statement’s dependencies.
      * Purpose: To test that the SW is able to find an existing customer and 
@@ -158,28 +158,25 @@ public class searchCustomerTest {
      * Test Strategy: Pairwise testing with best fit orthogonal array 
      * Input: enter the following data in each test case (record)
      * specifically:
-     * gender   NIC     FN      LN      PPID    Addr    dob    phone#   img     expected output
-        none	unique	vld	vld	vld	vld	vld	vld	vld     fail
-        none	invld	vld	vld	vld	invld	invld	invld	invld   fail
-        none	taken	invld	invld	invld	vld	vld	vld	invld   fail
-        none	unique	invld	invld	invld	invld	invld	invld	vld     fail
-        male	unique	vld	invld	invld	vld	invld	invld	vld     fail
-        male	invld	vld	invld	invld	invld	vld	vld	invld   fail
-        male	taken	invld	vld	vld	vld	invld	invld	invld   fail
-        male	taken	invld	vld	vld	invld	vld	vld	vld     fail
-        female	unique	invld	vld	invld	invld	vld	invld	invld   fail
-        female	invld	invld	vld	invld	vld	invld	vld	vld     fail
-        female	taken	vld	invld	vld	invld	vld	invld	vld     fail
-        female	invld	vld	invld	vld	vld	invld	vld	invld   fail
-        both	unique	invld	invld	vld	invld	invld	vld	invld   fail
-        both	invld	invld	invld	vld	vld	vld	invld	vld     fail
-        both	taken	vld	vld	invld	invld	invld	vld	vld     fail
-        both	invld	vld	vld	invld	vld	vld	invld	invld   fail
-     * 'fail' means not all update fields were updated because
-     * one or more fields were invalid, incorrect or empty.
+     * gender   NIC     FN      LN      PPID    Addr    dob    phone#   img     
+        none	unique	vld	vld	vld	vld	vld	vld	vld     
+        none	invld	vld	vld	vld	invld	invld	invld	invld   
+        none	taken	invld	invld	invld	vld	vld	vld	invld   
+        none	unique	invld	invld	invld	invld	invld	invld	vld     
+        male	unique	vld	invld	invld	vld	invld	invld	vld     
+        male	invld	vld	invld	invld	invld	vld	vld	invld   
+        male	taken	invld	vld	vld	vld	invld	invld	invld   
+        male	taken	invld	vld	vld	invld	vld	vld	vld     
+        female	unique	invld	vld	invld	invld	vld	invld	invld   
+        female	invld	invld	vld	invld	vld	invld	vld	vld     
+        female	taken	vld	invld	vld	invld	vld	invld	vld     
+        female	invld	vld	invld	vld	vld	invld	vld	invld   
+        both	unique	invld	invld	vld	invld	invld	vld	invld   
+        both	invld	invld	invld	vld	vld	vld	invld	vld     
+        both	taken	vld	vld	invld	invld	invld	vld	vld     
+        both	invld	vld	vld	invld	vld	vld	invld	invld
      * Expected state: The desktop shall be in the 'Not all fields were updated.'
      * state.
-     * 100% statement + branch
      */
     @ParameterizedTest
     @MethodSource("tc2Provider")
