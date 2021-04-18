@@ -110,7 +110,7 @@ public class ticketIntegrationTest {
    * Input: user enters "TO001" in text box. call method updateButtonActionPerformed()
    * Expected state: The update module writes to flight ID field once.
    */
-/*  @Test
+  @Test
   public void testFlightIDStub() {
     testTicket = new ticket();
 
@@ -120,9 +120,8 @@ public class ticketIntegrationTest {
 
     testTicket.setFLTID("TO001");
     testTicket.getUpdateButton().doClick();
-    assertEquals("TO001", testTicket.getFLTID());
   }
-*/
+
   /**
    * Test Case ID:
    * Requirement: REQ-
