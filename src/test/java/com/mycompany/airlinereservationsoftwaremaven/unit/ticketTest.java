@@ -14,6 +14,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import javax.swing.JButton;
 import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -54,12 +55,12 @@ public class ticketTest {
       ex.printStackTrace();
     }
     try {
-      String query3 = "INSERT INTO `flight` (`id`, `flightname`, `source`, `depart`, `date`, `deptime`, `arrtime`, `flightcharge`) VALUES\n"
+      String query9 = "INSERT INTO `flight` (`id`, `flightname`, `source`, `depart`, `date`, `deptime`, `arrtime`, `flightcharge`) VALUES\n"
           + "('FO001', 'JetBlue', 'India', 'India', '2019-06-14', '8.00AM', '10.00PM', '50000'),\n"
           + "('FO002', 'Delta', 'India', 'India', '2019-06-15', '8.00PM', '2.00AM', '15000'),\n"
           + "('FO003', 'American Airlines', 'India', 'India', '2019-06-15', '9.00AM', '10.00AM', '9000');";
       Statement st = con.createStatement();
-      st.executeUpdate(query3);
+      st.executeUpdate(query9);
       st.close();
     } catch (SQLException ex) {
       ex.printStackTrace();
@@ -101,6 +102,10 @@ public class ticketTest {
     }
   }
 
+  @AfterEach
+  public void clearErrMsg(){
+    ticket.errMsg = "";
+  }
 
   /**
    * Test Case ID:
@@ -131,11 +136,12 @@ public class ticketTest {
 
   @Test
   public void testSearchCustByIdNotFound() {
-    ticket.setCID("CS00B");
+    ticket.setCID("CS008");
     JButton custBtn = ticket.getSearchCustInfoButton();
     System.out.println(custBtn);
     custBtn.doClick();
-
+    String msg = "Record not Found";
+    assertEquals(msg, ticket.errMsg);
   }
 
   /**
@@ -215,4 +221,32 @@ public class ticketTest {
     assertEquals("jLabel4", ticket.getTotal());
   }
 
+
+  /**
+   * Test Case ID: UTest-isValidPPID-001
+   * Requirement: REQ-8 The account’s passport ID input field in the Airline
+   * Reservation Software shall accept only alphanumeric and '<' characters.
+   * Purpose: To test that the input passed does not contain invalid characters.
+   * Test setup: set the addCustomer object passport ID member field using
+   * method setPPID(). 1 test case is used as input.
+   * Test Strategy: Equivalence class testing.
+   *  Partition input space as follows:
+   *  - set of passport ID values without any invalid characters
+   *  - set of passport ID values with any invalid characters
+   * All inputs:
+   *  - partition input value: "abz029<<<"
+   * Input: call method isValidPPID()
+   * Expected output: method isValidPPID() returns true.
+   */
+  @Test
+  public void testIsInvalidSearchCustID() {
+    ticket.setCID("CS00#");
+    boolean result = ticket.isValidSearchCustID();
+    JButton custBtn = ticket.getSearchCustInfoButton();
+    System.out.println(custBtn);
+    custBtn.doClick();
+    String msg = "The entered customer ID is Invalid";
+    assertEquals(msg, ticket.errMsg);
+    assertFalse(result);
+  }
 }

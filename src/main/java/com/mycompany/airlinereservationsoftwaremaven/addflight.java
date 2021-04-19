@@ -31,7 +31,7 @@ public class addflight extends javax.swing.JInternalFrame {
         initComponents();
         autoID();
     }
-    
+    public String errMsg;
      Connection con;
     PreparedStatement pst;
     
@@ -289,33 +289,45 @@ public class addflight extends javax.swing.JInternalFrame {
          String flightcharge = txtflightcharge.getText();
          
          
-      
-        try {
-            Class.forName("com.mysql.jdbc.Driver");
-             con = DriverManager.getConnection("jdbc:mysql://localhost/airline","root","");
-            pst = con.prepareStatement("insert into flight(id,flightname,source,depart,date,deptime,arrtime,flightcharge)values(?,?,?,?,?,?,?,?)");
-            
-            pst.setString(1, id);
-            pst.setString(2, flightname);
-            pst.setString(3, source);
-            pst.setString(4, depart);
-            pst.setString(5, date);
-            pst.setString(6, departtime);
-            pst.setString(7, arrtime);
-            pst.setString(8, flightcharge);
-           
-            pst.executeUpdate();
-            
-            
-            JOptionPane.showMessageDialog(null,"Flight Created.........");
-        } catch (ClassNotFoundException ex) {
-            Logger.getLogger(addflight.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (SQLException ex) {
-            Logger.getLogger(addflight.class.getName()).log(Level.SEVERE, null, ex);
-        }
-           
-            
-            
+      if(validateArrTime()) {
+          if (validateDepTime()) {
+              if (validateFlightName()) {
+                  try {
+                      Class.forName("com.mysql.jdbc.Driver");
+                      con = DriverManager
+                          .getConnection("jdbc:mysql://localhost/airline", "root", "");
+                      pst = con.prepareStatement(
+                          "insert into flight(id,flightname,source,depart,date,deptime,arrtime,flightcharge)values(?,?,?,?,?,?,?,?)");
+
+                      pst.setString(1, id);
+                      pst.setString(2, flightname);
+                      pst.setString(3, source);
+                      pst.setString(4, depart);
+                      pst.setString(5, date);
+                      pst.setString(6, departtime);
+                      pst.setString(7, arrtime);
+                      pst.setString(8, flightcharge);
+
+                      pst.executeUpdate();
+
+                      JOptionPane.showMessageDialog(null, "Flight Created.........");
+                  } catch (ClassNotFoundException ex) {
+                      Logger.getLogger(addflight.class.getName()).log(Level.SEVERE, null, ex);
+                  } catch (SQLException ex) {
+                      Logger.getLogger(addflight.class.getName()).log(Level.SEVERE, null, ex);
+                  }
+              }else{
+                  errMsg = "The entered flight name is invalid";
+                  JOptionPane.showMessageDialog(this,"The entered flight name is invalid");
+              }
+          }else{
+              errMsg = "The entered departure time is invalid";
+              JOptionPane.showMessageDialog(this,"The entered departure time is invalid");
+          }
+      }else{
+          errMsg = "The entered arrival time is invalid";
+          JOptionPane.showMessageDialog(this,"The entered arrival time is invalid");
+      }
         
         
         
@@ -344,7 +356,21 @@ public class addflight extends javax.swing.JInternalFrame {
         return jButton1;
     }
 
-
+    public boolean validateArrTime(){
+        String regex = "^[APM0-9[.]]+$";
+        boolean valid = Pattern.matches(regex, txtarrtime.getText());
+        return valid;
+    }
+    public boolean validateDepTime(){
+        String regex = "^[APM0-9[.]]+$";
+        boolean valid = Pattern.matches(regex, txtdtime.getText());
+        return valid;
+    }
+    public boolean validateFlightName(){
+        String regex = "^[a-zA-Z]{1,64}$";
+        boolean valid = Pattern.matches(regex, txtflightname.getText());
+        return valid;
+    }
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // TODO add your handling code here:

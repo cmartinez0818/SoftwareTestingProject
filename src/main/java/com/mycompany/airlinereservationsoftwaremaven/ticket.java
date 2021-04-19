@@ -30,9 +30,11 @@ import javax.swing.table.DefaultTableModel;
 
 public class ticket extends javax.swing.JInternalFrame {
 
+    public String errMsg;
     Connection con;
     PreparedStatement pst;
     ticketService ticketService;
+    String findState;
 
     //public String updateMsg;
     //String findState;
@@ -46,19 +48,6 @@ public class ticket extends javax.swing.JInternalFrame {
     public ticket() {
         initComponents();
         autoID();
-    }
-
-    public ticket(ticketService scs) {
-        ticketService = scs;
-        try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
-            con = DriverManager.getConnection("jdbc:mysql://localhost/airline","root","");
-            initComponents();
-        } catch (ClassNotFoundException ex) {
-            Logger.getLogger(ticket.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (SQLException ex) {
-            Logger.getLogger(ticket.class.getName()).log(Level.SEVERE, null, ex);
-        }
     }
 
     /**
@@ -533,47 +522,47 @@ public class ticket extends javax.swing.JInternalFrame {
         String id = txtcustid.getText();
 
 
+        if(isValidSearchCustID()) {
+            try {
+                Class.forName("com.mysql.jdbc.Driver");
+                con = DriverManager.getConnection("jdbc:mysql://localhost/airline", "root", "");
+                pst = con.prepareStatement("select * from customer where id = ?");
+                pst.setString(1, id);
+                ResultSet rs = pst.executeQuery();
 
-        try {
-            Class.forName("com.mysql.jdbc.Driver");
-            con = DriverManager.getConnection("jdbc:mysql://localhost/airline","root","");
-            pst = con.prepareStatement("select * from customer where id = ?");
-            pst.setString(1, id);
-            ResultSet rs = pst.executeQuery();
+                if (rs.next() == false) {
+                    JOptionPane.showMessageDialog(this, "Record not Found");
+                    errMsg = "Record not Found";
+                    //showCustNotFoundMsg();
+                } else {
+                    String fname = rs.getString("firstname");
+                    String lname = rs.getString("lastname");
 
-            if(rs.next() == false)
-            {
-                JOptionPane.showMessageDialog(this, "Record not Found");
+                    String passport = rs.getString("passport");
+
+                    txtfirstname.setText(fname.trim());
+                    txtlastname.setText(lname.trim());
+
+                    txtpassport.setText(passport.trim());
+
+
+                }
+
+
+            } catch (ClassNotFoundException ex) {
+                Logger.getLogger(ticket.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (SQLException ex) {
+                Logger.getLogger(ticket.class.getName()).log(Level.SEVERE, null, ex);
             }
-            else
-            {
-                String fname = rs.getString("firstname");
-                String lname = rs.getString("lastname");
-
-                String passport = rs.getString("passport");
-
-
-                txtfirstname.setText(fname.trim());
-                txtlastname.setText(lname.trim());
-
-                txtpassport.setText(passport.trim());
-
-
-
-            }
-
-
-
-        } catch (ClassNotFoundException ex) {
-            Logger.getLogger(ticket.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (SQLException ex) {
-            Logger.getLogger(ticket.class.getName()).log(Level.SEVERE, null, ex);
+        }else{
+            errMsg = "The entered customer ID is Invalid";
+            JOptionPane.showMessageDialog(this,
+                "The entered customer ID is Invalid");
         }
 
 
 
-
-    }//GEN-LAST:event_jButton4ActionPerformed
+        }//GEN-LAST:event_jButton4ActionPerformed
 
     private void jTable1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable1MouseClicked
         // TODO add your handling code here:
@@ -653,6 +642,11 @@ public class ticket extends javax.swing.JInternalFrame {
         this.hide();
     }//GEN-LAST:event_jButton2ActionPerformed
 
+    public boolean isValidSearchCustID(){
+        String regex = "^[a-zA-Z0-9[<]]+$";
+        boolean result = Pattern.matches(regex, txtcustid.getText());
+        return result;
+    }
 
     public void setFLTID(String fltid) {
         flightno.setText(fltid);
@@ -711,7 +705,6 @@ public class ticket extends javax.swing.JInternalFrame {
     public javax.swing.JButton getSearchCustInfoButton() {
         return jButton4;
     }
-
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

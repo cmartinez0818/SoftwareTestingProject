@@ -88,6 +88,159 @@ public class addFlightTest {
     bookBtn.doClick();
   }
 
+  /**
+   * Test Case ID: UTest-validateFlightName
+   * Requirement: REQ-2 The account’s name input fields in the Airline
+   * Reservation Software shall accept only alpha characters.
+   * Purpose: To test that the input passed is valid input, ensuring that the
+   * input only contains alphabetic characters.
+   * Test setup: An object of the addCustomer class is created with the text
+   * value of member field txtfirstname set to "JetBlue".
+   * Test Strategy: Equivalence class testing
+   *  Partition input space as follows:
+   *  - character classes in input: [a-zA-Z], [\.](any character)
+   * Input: set flight name to JetBlue
+   * Expected output: method validateFlightName() returns true.
+   */
+  @Test
+  public void testValidateNameTrue() {
+    addFlight.setTxtArrTime("9.00AM");
+    addFlight.setTxtFlightName("JetBlue");
+    addFlight.setTxtDepTime("9.00AM");
+    boolean result = addFlight.validateFlightName();
+    assertTrue(result);
+  }
 
+
+  /**
+   * Test Case ID: UTest-validateFlightName
+   * Requirement: REQ-2 The account’s name input fields in the Airline
+   * Reservation Software shall accept only alpha characters.
+   * Purpose: To test that the invalid input passed is returned as invalid
+   * Test setup: An object of the addCustomer class is created with the text
+   * value of member field txtfirstname set to "JetBlue".
+   * Test Strategy: Negative testing
+   *  Partition input space as follows:
+   *  - character classes in input: [a-zA-Z[-]], [\.](any character)
+   * All Inputs:
+   *  - partition input values: "David-Steven", "David-Steven1", " "
+   * Input: call method validateFirstName()
+   * Expected output: method validateFirstName() returns true.
+   */
+  @Test
+  public void testValidateNameFalse() {
+    addFlight.setTxtArrTime("9.00AM");
+    addFlight.setTxtFlightName("JetBlu3");
+    addFlight.setTxtDepTime("9.00AM");
+    boolean result = addFlight.validateFlightName();
+    JButton bookBtn = addFlight.getAddFlightButton();
+    System.out.println(bookBtn);
+    bookBtn.doClick();
+    String msg = "The entered flight name is invalid";
+    assertEquals(msg, addFlight.errMsg);
+    assertFalse(result);
+  }
+
+  /**
+   * Test Case ID: UTest-validateFlightName
+   * Requirement: REQ-2 The account’s name input fields in the Airline
+   * Reservation Software shall accept only alpha characters.
+   * Purpose: To test that the input passed is valid input, ensuring that the
+   * input only contains alphabetic characters.
+   * Test setup: An object of the addCustomer class is created with the text
+   * value of member field txtfirstname set to "JetBlue".
+   * Test Strategy: Equivalence class testing
+   *  Partition input space as follows:
+   *  - character classes in input: [a-zA-Z], [\.](any character)
+   * Input: set flight name to JetBlue
+   * Expected output: method validateFlightName() returns true.
+   */
+  @Test
+  public void testValidateArrTimeTrue() {
+    addFlight.setTxtFlightName("JetBlue");
+    addFlight.setTxtArrTime("9.00AM");
+    addFlight.setTxtDepTime("9.00AM");
+    boolean result = addFlight.validateArrTime();
+    assertTrue(result);
+  }
+
+  /**
+   * Test Case ID: UTest-validateFlightName
+   * Requirement: REQ-2 The account’s name input fields in the Airline
+   * Reservation Software shall accept only alpha characters.
+   * Purpose: To test that the input passed is valid input, ensuring that the
+   * input only contains alphabetic characters.
+   * Test setup: An object of the addCustomer class is created with the text
+   * value of member field txtfirstname set to "JetBlue".
+   * Test Strategy: Equivalence class testing
+   *  Partition input space as follows:
+   *  - character classes in input: [a-zA-Z], [\.](any character)
+   * Input: set flight name to JetBlue
+   * Expected output: method validateFlightName() returns true.
+   */
+  @Test
+  public void testValidateArrTimeFalse() {
+    addFlight.setTxtFlightName("JetBlue");
+    addFlight.setTxtArrTime("9.00BB");
+    addFlight.setTxtDepTime("9.00AM");
+    boolean result = addFlight.validateArrTime();
+    JButton bookBtn = addFlight.getAddFlightButton();
+    System.out.println(bookBtn);
+    bookBtn.doClick();
+    String msg = "The entered arrival time is invalid";
+    assertEquals(msg, addFlight.errMsg);
+    assertFalse(result);
+  }
+
+  /**
+   * Test Case ID: UTest-validateFlightName
+   * Requirement: REQ-2 The account’s name input fields in the Airline
+   * Reservation Software shall accept only alpha characters.
+   * Purpose: To test that the input passed is valid input, ensuring that the
+   * input only contains alphabetic characters.
+   * Test setup: An object of the addCustomer class is created with the text
+   * value of member field txtfirstname set to "JetBlue".
+   * Test Strategy: Equivalence class testing
+   *  Partition input space as follows:
+   *  - character classes in input: [a-zA-Z], [\.](any character)
+   * Input: set flight name to JetBlue
+   * Expected output: method validateFlightName() returns true.
+   */
+  @Test
+  public void testValidateDepTimeTrue() {
+    addFlight.setTxtFlightName("JetBlue");
+    addFlight.setTxtArrTime("9.00AM");
+    addFlight.setTxtDepTime("9.00AM");
+    boolean result = addFlight.validateDepTime();
+    assertTrue(result);
+  }
+
+  /**
+   * Test Case ID: UTest-validateFlightName
+   * Requirement: REQ-2 The account’s name input fields in the Airline
+   * Reservation Software shall accept only alpha characters.
+   * Purpose: To test that the input passed is valid input, ensuring that the
+   * input only contains alphabetic characters.
+   * Test setup: An object of the addCustomer class is created with the text
+   * value of member field txtfirstname set to "JetBlue".
+   * Test Strategy: Equivalence class testing
+   *  Partition input space as follows:
+   *  - character classes in input: [a-zA-Z], [\.](any character)
+   * Input: set flight name to JetBlue
+   * Expected output: method validateFlightName() returns true.
+   */
+  @Test
+  public void testValidateDepTimeFalse() {
+    addFlight.setTxtFlightName("JetBlue");
+    addFlight.setTxtArrTime("9.00AM");
+    addFlight.setTxtDepTime("9.00BB");
+    boolean result = addFlight.validateDepTime();
+    JButton bookBtn = addFlight.getAddFlightButton();
+    System.out.println(bookBtn);
+    bookBtn.doClick();
+    String msg = "The entered departure time is invalid";
+    assertEquals(msg, addFlight.errMsg);
+    assertFalse(result);
+  }
 
 }

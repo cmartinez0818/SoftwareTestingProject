@@ -18,6 +18,7 @@ import java.sql.Statement;
 import java.util.EventListener;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JButton;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
@@ -49,8 +50,8 @@ public class ticketIntegrationTest {
       Class.forName("com.mysql.cj.jdbc.Driver");
       con = DriverManager.getConnection("jdbc:mysql://localhost/airline","root","");
       Statement st = con.createStatement();
-      st.executeUpdate(query1);
-      st.executeUpdate(query2);
+      //st.executeUpdate(query1);
+     // st.executeUpdate(query2);
       st.executeUpdate(query3);
       st.close();
     }catch(SQLException e){
@@ -64,14 +65,22 @@ public class ticketIntegrationTest {
   public static void tearDownClass() throws SQLException {
     //testTicket = null;
     try {
-      String query = "delete from Customer where id='CS016'";
-      String query2 = "delete from ticket where id='TO006' or id='TO007'";
+      String query = "delete from Customer where id='CS016';";
+      String query2 = "delete from ticket where id='TO001' or id='TO002';";
       Statement st = con.createStatement();
       st.executeUpdate(query);
       st.executeUpdate(query2);
       st.close();
     } catch (SQLException e) {
       e.printStackTrace();
+    }
+    try {
+      String query5 = "delete from flight where 1=1";
+      Statement st = con.createStatement();
+      st.executeUpdate(query5);
+      st.close();
+    } catch (SQLException ex) {
+      ex.printStackTrace();
     }
     con.close();
   }
@@ -82,7 +91,7 @@ public class ticketIntegrationTest {
     //create mocks, which searchCustomer is dependent on.
     ticketService  = Mockito.mock(ticketService.class);
     desktop = new Main();
-    testTicket = new ticket(ticketService);
+    testTicket = new ticket();
     desktop.getDesktop().add(testTicket);
     testTicket.setVisible(true);
   }
@@ -96,6 +105,37 @@ public class ticketIntegrationTest {
     desktop = null;
   }
 
+  @Test
+  public void testBookTicket() {
+    testTicket.setCID("CS001");
+    testTicket.setTicketFirstName("Steve");
+    testTicket.setTicketLastName("Stevenson");
+    testTicket.setDestination("Uk");
+    testTicket.setSource("India");
+    testTicket.autoID();
+    testTicket.setFLID("FO002");
+    testTicket.setSeats("1");
+    testTicket.setPrice("50000");
+    JButton bookBtn = testTicket.getUpdateButton();
+    System.out.println(bookBtn);
+    bookBtn.doClick();
+  }
+
+  @Test
+  public void testBookTicketNext() {
+    testTicket.setCID("CS001");
+    testTicket.setTicketFirstName("Steve");
+    testTicket.setTicketLastName("Stevenson");
+    testTicket.setDestination("Uk");
+    testTicket.setSource("India");
+    testTicket.autoID();
+    testTicket.setFLID("FO002");
+    testTicket.setSeats("1");
+    testTicket.setPrice("50000");
+    JButton bookBtn = testTicket.getUpdateButton();
+    System.out.println(bookBtn);
+    bookBtn.doClick();
+  }
 
   /**
    * Test Case ID: TicketIntegrationTest-001
@@ -135,7 +175,6 @@ public class ticketIntegrationTest {
    * Expected state: The desktop shall not display any pop-up and output the
    * correct customer name that corresponds with the customer ID in the stubbed sql.
    */
-
   @Test
   public void verifyFindWithMockPos(){
     testTicket.setCID("CS016");
@@ -143,6 +182,68 @@ public class ticketIntegrationTest {
 
     verify(ticketService, times(0)).showCustNotFoundMsg();
     assertEquals("Cary", testTicket.getCustFirstName());
+  }
+
+  /**
+   * Test Case ID: ITest-searchCustomer-002
+   * Requirement: REQ-19 The booking agent shall search for a customer account
+   * by using the customer account’s ID as search input.
+   * Purpose: To test that the SW correctly handles and notifies the user when
+   * a customer is not found.
+   * Test setup: create a new mock that represents a dialogue informing the
+   * customer was not found.
+   * Test Strategy: Mock behavior testing.
+   * Input: user enters "CS008" in search box. call method
+   * findButtonActionPerformed()
+   * Expected state: The desktop shall display a pop-up only once.
+   */
+  @Test
+  public void verifyFindWithMockNeg(){
+    testTicket.setCID("CS008");
+    testTicket.getSearchCustInfoButton().doClick();
+
+    String msg = "Record not Found";
+    assertEquals(msg, testTicket.errMsg);
+  }
+
+  /**
+   * Test Case ID:
+   * Requirement:
+   *
+   * Purpose:
+   *
+   * Test setup:
+   * Test Strategy:
+   * Partitions:
+   * -
+   * -
+   * Input:
+   * Expected state:
+   *
+   */
+  @Test
+  public void testTicketInfoBySourceDest() {
+    try {
+      String query9 = "INSERT INTO `flight` (`id`, `flightname`, `source`, `depart`, `date`, "
+          + "`deptime`, `arrtime`, `flightcharge`) VALUES\n"
+          + "('FO001', 'JetBlue', 'India', 'India', '2019-06-14', '8.00AM', '10.00PM', '50000'),\n"
+          + "('FO002', 'Delta', 'India', 'India', '2019-06-15', '8.00PM', '2.00AM', '15000'),\n"
+          + "('FO003', 'American Airlines', 'India', 'India', '2019-06-15', '9.00AM', '10.00AM',"
+          + " '9000');";
+      Statement st = con.createStatement();
+      st.executeUpdate(query9);
+      st.close();
+    } catch (SQLException ex) {
+      ex.printStackTrace();
+    }
+
+    testTicket.setDestination("India");
+    testTicket.setSource("India");
+
+    JButton tickBtn = testTicket.getTicketSearchButton();
+    System.out.println(tickBtn);
+    tickBtn.doClick();
+
   }
 
 }
