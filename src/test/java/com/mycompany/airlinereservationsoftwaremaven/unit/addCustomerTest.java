@@ -13,6 +13,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.stream.Stream;
 import javax.swing.JButton;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
@@ -21,6 +24,8 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
 /**
@@ -86,6 +91,7 @@ public class addCustomerTest {
     @AfterEach
     public void clearErrMsg(){
         addCust.errMsg = "";
+        addCust.unitMsg = "";
     }
 
     /**
@@ -629,5 +635,118 @@ public class addCustomerTest {
                 assertFalse(addCust.getMaleR().isSelected());
                 break;
         }
+    }
+    
+    /**
+     * Test Case ID: UTest-validCustomerAddInput-001
+     * Requirement: REQ-17 The booking agent shall create a new customer account
+     * using the customer’s information outlined in this requirement’s
+     * dependencies.
+     * Purpose: To test that the SW is able to add a new customer when correct 
+     * input added.
+     * Test setup: Open an add customer tab virtually in memory. 
+     * Test Strategy: Pairwise testing with best fit orthogonal array 
+     * Input: enter the following data in each test case (record)
+     * specifically:
+     * gender   NIC   FN      LN     PPID   Addr   dob   phone#  img
+     |  male  |unique|vald  |vald  |vald  |vald  |vald  |vald  |vald|  
+     |female  |unique|vald  |vald  |vald  |vald  |vald  |vald  |vald|
+     * Expected state: The desktop shall be in the 'New customer added'
+     * state.
+     */
+    @ParameterizedTest
+    @ValueSource(strings = {"0", "1"})
+    public void testValidNewCustomer(String choice) {
+        try{
+        byte [] blob = {00000000};
+        String testNIC = "045685632"+choice;
+        addCust.fillAddCustomer("dave","smith",testNIC,"11<<59","over there", "2000-01-01", choice, "1234567892", blob);
+        
+        addCust.getAddButton().doClick();
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+        assertEquals("New customer added", addCust.unitMsg);
+    }
+    
+    /**
+     * Test Case ID: UTest-validCustomerAddInput-002
+     * Requirement: REQ-17 The booking agent shall create a new customer account
+     * using the customer’s information outlined in this requirement’s
+     * dependencies.
+     * Purpose: To test that the SW does not add a new customer when incorrect 
+     * input added.
+     * Test setup: Open an add customer tab virtually in memory. 
+     * Test Strategy: Pairwise testing with best fit orthogonal array 
+     * Input: enter the following data in each test case (record)
+     * specifically:
+     * gender   NIC     FN      LN      PPID    Addr    dob    phone#   img     
+        none	unique	vld	vld	vld	vld	vld	vld	vld     
+        none	invld	vld	vld	vld	invld	invld	invld	invld   
+        none	taken	invld	invld	invld	vld	vld	vld	invld   
+        none	unique	invld	invld	invld	invld	invld	invld	vld     
+        male	unique	vld	invld	invld	vld	invld	invld	vld     
+        male	invld	vld	invld	invld	invld	vld	vld	invld   
+        male	taken	invld	vld	vld	vld	invld	invld	invld   
+        male	taken	invld	vld	vld	invld	vld	vld	vld     
+        female	unique	invld	vld	invld	invld	vld	invld	invld   
+        female	invld	invld	vld	invld	vld	invld	vld	vld     
+        female	taken	vld	invld	vld	invld	vld	invld	vld     
+        female	invld	vld	invld	vld	vld	invld	vld	invld   
+        both	unique	invld	invld	vld	invld	invld	vld	invld   
+        both	invld	invld	invld	vld	vld	vld	invld	vld     
+        both	taken	vld	vld	invld	invld	invld	vld	vld     
+        both	invld	vld	vld	invld	vld	vld	invld	invld
+     * Expected state: The desktop shall be in the 'No new customer made'
+     * state.
+     */
+    @ParameterizedTest
+    @MethodSource("tc2Provider")
+    public void testValidNewCustomerNeg(String[] args) {
+        byte[] blob = {00000000};
+        if(args[8].equals("2")){
+            blob = new byte[0];
+        }
+        addCust.fillAddCustomer(args[2],args[3],args[1],args[4],
+                args[5], args[6], args[0], args[7], blob);
+        addCust.getAddButton().doClick();
+        assertEquals("No new customer made", addCust.unitMsg);
+    }
+    
+    static Stream<Arguments> tc2Provider() {
+        String nic = "6278465824";
+        String badnic = "9876543210";
+        String inic = "3f4";
+        String fn = "john-k";
+        String ifn = "jack$";
+        String ppid = "1<<2";
+        String ippid = "1>g4";
+        String addr = "there";
+        String iaddr = "";
+        DateFormat da = new SimpleDateFormat("yyyy-MM-dd");
+        String dob = da.format(new java.util.Date());
+        String idob = "5xf16h8248";
+        String pn = "1234567890";
+        String ipn = "1-800-granola";
+        String blob = "1";
+        String iblob = "2";
+        return Stream.of(
+            Arguments.of((Object) new String[]{"-1", nic, fn, fn, ppid, addr, dob, pn, blob}),
+            Arguments.of((Object) new String[]{"-1", inic, fn, fn, ppid, iaddr, idob, ipn, iblob}),
+            Arguments.of((Object) new String[]{"-1", badnic, ifn, ifn, ippid, addr, dob, pn, iblob}),
+            Arguments.of((Object) new String[]{"-1", nic, ifn, ifn, ippid, iaddr, idob, ipn, blob}),
+            Arguments.of((Object) new String[]{"0", nic, fn, ifn, ippid, addr, idob, ipn, blob}),
+            Arguments.of((Object) new String[]{"0", inic, fn, ifn, ippid, iaddr, dob, pn, iblob}),
+            Arguments.of((Object) new String[]{"0", badnic, ifn, fn, ppid, addr, idob, ipn, iblob}),
+            Arguments.of((Object) new String[]{"0", badnic, ifn, fn, ppid, iaddr, dob, pn, blob}),
+            Arguments.of((Object) new String[]{"1", nic, ifn, fn, ippid, iaddr, dob, ipn, iblob}),
+            Arguments.of((Object) new String[]{"1", inic, ifn, fn, ippid, addr, idob, pn, blob}),
+            Arguments.of((Object) new String[]{"1", badnic, fn, ifn, ppid, iaddr, dob, ipn, blob}),
+            Arguments.of((Object) new String[]{"1", inic, fn, ifn, ppid, addr, idob, pn, iblob}),
+            Arguments.of((Object) new String[]{"2", nic, ifn, ifn, ppid, iaddr, idob, pn, iblob}),
+            Arguments.of((Object) new String[]{"2", inic, ifn, ifn, ppid, addr, dob, ipn, blob}),
+            Arguments.of((Object) new String[]{"2", badnic, fn, fn, ippid, iaddr, idob, pn, blob}),
+            Arguments.of((Object) new String[]{"2", inic, fn, fn, ippid, addr, dob, ipn, iblob})
+        );
     }
 }

@@ -13,6 +13,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.logging.Level;
@@ -43,6 +44,7 @@ public class addCustomer extends javax.swing.JInternalFrame {
     }
     
     public String errMsg;
+    public String unitMsg;
    Connection con;
     PreparedStatement pst;
     
@@ -348,11 +350,6 @@ public class addCustomer extends javax.swing.JInternalFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     
-    
-    
-    
- 
-    
     public void autoID()
     {
         try {
@@ -381,13 +378,38 @@ public class addCustomer extends javax.swing.JInternalFrame {
     }
     
     
+    public void fillAddCustomer(String fn, String ln, String nic, String ppid, String addr, String dob, String gender, String phone, byte[] blob) {
+        txtfirstname.setText(fn);
+        txtlastname.setText(ln);
+        txtnic.setText(nic);
+        txtpassport.setText(ppid);
+        txtaddress.setText(addr);
+        try{
+            Date date = new SimpleDateFormat("yyyy-MM-dd").parse(dob);
+            dobField.setDate(date);
+        }catch(ParseException e){
+            dobField.setDate(null);
+        }
+        if(gender.equals("-1")||gender.equals("2")){//no selection or both
+            r1.setSelected(false);
+            r2.setSelected(false);
+        }else if(gender.equals("0")){//male
+            r1.setSelected(true);
+            r2.setSelected(false);
+        }else if(gender.equals("1")){//female
+            r2.setSelected(true);
+            r1.setSelected(false);
+        }
+        txtcontact.setText(phone);
+        userimage = blob;
+        ImageIcon image = new ImageIcon(blob);
+        Image im = image.getImage();
+        Image myImg = im.getScaledInstance(txtphoto.getWidth(), txtphoto.getHeight(),Image.SCALE_SMOOTH);
+        ImageIcon newImage = new ImageIcon(myImg);
+        txtphoto.setIcon(newImage);
+    }
     
-    
-    
-    
-    
-    
-    
+       
     private void txtlastnameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtlastnameActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtlastnameActionPerformed
@@ -397,8 +419,7 @@ public class addCustomer extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_txtpassportActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        // TODO add your handling code here:
-        
+        // TODO add your handling code here:        
     
       
         try {
@@ -432,16 +453,6 @@ public class addCustomer extends javax.swing.JInternalFrame {
         }
         
        
-       
-       
-       
-       
-       
-       
-        
-        
-        
-        
         
     }//GEN-LAST:event_jButton1ActionPerformed
 
@@ -464,45 +475,68 @@ public class addCustomer extends javax.swing.JInternalFrame {
         {
             Gender = "FeMale";
         }
-        
-        String contact = txtcontact.getText();         
-        if(isValidNIC()){
-            if(isUniqueNIC()){  
-                try {
-                    Class.forName("com.mysql.jdbc.Driver");
-                    con = DriverManager.getConnection("jdbc:mysql://localhost/airline","root","");
-                    pst = con.prepareStatement("insert into customer(id,firstname,lastname,nic,passport,address,dob,gender,contact,photo)values(?,?,?,?,?,?,?,?,?,?)");
-
-                    pst.setString(1, id);
-                    pst.setString(2, firstname);
-                    pst.setString(3, lastname);
-                    pst.setString(4, nic);
-                    pst.setString(5, passport);
-                    pst.setString(6, address);
-                    pst.setString(7, date);
-                    pst.setString(8, Gender);
-                    pst.setString(9, contact);
-                    pst.setBytes(10, userimage);
-                    pst.executeUpdate();
-
-
-                    JOptionPane.showMessageDialog(null,"Registation Createdd.........");
-
-
-                } catch (ClassNotFoundException ex) {
-                    Logger.getLogger(addCustomer.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (SQLException ex) {
-                    Logger.getLogger(addCustomer.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            }else{
-                errMsg = "The entered NIC is already in use by an existing customer";
-                JOptionPane.showMessageDialog(this,"The entered NIC is already in use by an existing customer");
-            }
-        }else{
+        boolean allIsValidInput = true;
+        String contact = txtcontact.getText();
+        if(!isValidNIC()){
+            allIsValidInput = false;            
             errMsg = "Invalid NIC input. Enter exactly 10 digits only.";
-            JOptionPane.showMessageDialog(this,"Invalid NIC input. Enter exacly 10 digits only.");             
+            JOptionPane.showMessageDialog(this,"Invalid NIC input. Enter exacly 10 digits only.");
+        }
+        if(!isUniqueNIC()){
+            allIsValidInput = false;
+            errMsg = "The entered NIC is already in use by an existing customer";
+            JOptionPane.showMessageDialog(this,"The entered NIC is already in use by an existing customer");
+        }
+        if(!isValidFirstName()||!isValidLastName()){
+            allIsValidInput = false;
+        }
+        if(!isValidPPID()){
+            allIsValidInput = false;
+        }
+        if(!isValidPhoneNo()){
+            allIsValidInput = false;
+        }
+        if(address.isEmpty()){
+            allIsValidInput = false;
+        }
+        if(date.isEmpty()){
+            allIsValidInput = false;
+        }
+        if((!r1.isSelected()&&!r2.isSelected())||(r1.isSelected()&&r2.isSelected())){
+            allIsValidInput = false;
+        }
+        if(userimage.length==0){
+            allIsValidInput = false;
         }
         
+        if(allIsValidInput){
+            try{
+            Class.forName("com.mysql.jdbc.Driver");
+            con = DriverManager.getConnection("jdbc:mysql://localhost/airline","root","");
+            pst = con.prepareStatement("insert into customer(id,firstname,lastname,"
+                    + "nic,passport,address,dob,gender,contact,photo)values(?,?,?,?,?,?,?,?,?,?)");
+
+            pst.setString(1, id);
+            pst.setString(2, firstname);
+            pst.setString(3, lastname);
+            pst.setString(4, nic);
+            pst.setString(5, passport);
+            pst.setString(6, address);
+            pst.setString(7, date);
+            pst.setString(8, Gender);
+            pst.setString(9, contact);
+            pst.setBytes(10, userimage);
+            pst.executeUpdate();
+            JOptionPane.showMessageDialog(null,"Registation Created........");  
+            }catch (ClassNotFoundException ex) {
+                    Logger.getLogger(addCustomer.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (SQLException ex) {
+                    Logger.getLogger(addCustomer.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            unitMsg = "New customer added";
+        }else{
+            unitMsg = "No new customer made";
+        }
     }                                              
 
     private void cancelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelButtonActionPerformed
@@ -522,6 +556,12 @@ public class addCustomer extends javax.swing.JInternalFrame {
     public boolean isValidFirstName(){        
         String regex = "^[a-zA-Z[-]]{1,64}$";
         boolean valid = Pattern.matches(regex, txtfirstname.getText());        
+        return valid;
+    }
+    
+    public boolean isValidLastName(){        
+        String regex = "^[a-zA-Z[-]]{1,64}$";
+        boolean valid = Pattern.matches(regex, txtlastname.getText());        
         return valid;
     }
     
