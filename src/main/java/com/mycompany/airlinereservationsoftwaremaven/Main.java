@@ -1,5 +1,13 @@
 package com.mycompany.airlinereservationsoftwaremaven;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.KeyEvent;
+import java.beans.PropertyChangeListener;
+import javax.swing.AbstractAction;
+import javax.swing.Action;
+import javax.swing.JComponent;
+import javax.swing.KeyStroke;
+
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -8,12 +16,29 @@ package com.mycompany.airlinereservationsoftwaremaven;
 
 
 public class Main extends javax.swing.JFrame {
+    
+    private boolean addCustVisible = false;
+    private addCustomer addCustomerFrame;
 
     /**
      * Creates new form Main
      */
     public Main() {
         initComponents();
+        this.rootPane.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("F1"), "something");
+        this.rootPane.getActionMap().put("something", new AbstractAction() { 
+            @Override
+            public void actionPerformed(ActionEvent arg0) {
+                System.out.println("f1 pressed");
+                if(!addCustVisible){                    
+                    addCustVisible = true;
+                    addCustMenuItem.doClick();
+                }else{
+                    addCustVisible = false;
+                    addCustomerFrame.getCancelButton().doClick();
+                }
+            }
+        });
     }
 
     /**
@@ -42,6 +67,12 @@ public class Main extends javax.swing.JFrame {
         setTitle("desktopView");
         setPreferredSize(new java.awt.Dimension(1366, 768));
 
+        jDesktopPane1.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                jDesktopPane1KeyPressed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jDesktopPane1Layout = new javax.swing.GroupLayout(jDesktopPane1);
         jDesktopPane1.setLayout(jDesktopPane1Layout);
         jDesktopPane1Layout.setHorizontalGroup(
@@ -54,8 +85,10 @@ public class Main extends javax.swing.JFrame {
         );
 
         jMenu1.setText("Customer");
+        jMenu1.setName("customerTab"); // NOI18N
 
         addCustMenuItem.setText("Add Customer");
+        addCustMenuItem.setName("addCustMI"); // NOI18N
         addCustMenuItem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 addCustMenuItemActionPerformed(evt);
@@ -136,9 +169,9 @@ public class Main extends javax.swing.JFrame {
     private void addCustMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addCustMenuItemActionPerformed
         // TODO add your handling code here:
         
-        addCustomer cus = new addCustomer();
-        jDesktopPane1.add(cus);
-        cus.setVisible(true);
+        addCustomerFrame = new addCustomer();
+        jDesktopPane1.add(addCustomerFrame);
+        addCustomerFrame.setVisible(true);
         
     }//GEN-LAST:event_addCustMenuItemActionPerformed
 
@@ -187,6 +220,21 @@ public class Main extends javax.swing.JFrame {
         
         
     }//GEN-LAST:event_jMenuItem5ActionPerformed
+
+    private void jDesktopPane1KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jDesktopPane1KeyPressed
+/*System.out.println(evt.getKeyCode());
+        switch(evt.getKeyCode()){
+            case KeyEvent.VK_F1:
+                if(!addCustVisible){                    
+                    addCustVisible = true;
+                    addCustMenuItem.doClick();
+                }else{
+                    addCustVisible = false;
+                    addCustomerFrame.getCancelButton().doClick();
+                }
+                break;
+        } */       // TODO add your handling code here:
+    }//GEN-LAST:event_jDesktopPane1KeyPressed
 
     
     public javax.swing.JDesktopPane getDesktop(){

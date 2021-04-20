@@ -281,6 +281,7 @@ public class addCustomer extends javax.swing.JInternalFrame {
         });
 
         cancelButton.setText("Cancel");
+        cancelButton.setName("cancelBtn"); // NOI18N
         cancelButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 cancelButtonActionPerformed(evt);

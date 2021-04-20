@@ -117,6 +117,7 @@
         <Component class="javax.swing.JButton" name="jButton1">
           <Properties>
             <Property name="text" type="java.lang.String" value="Login"/>
+            <Property name="name" type="java.lang.String" value="login" noResource="true"/>
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton1ActionPerformed"/>
@@ -128,8 +129,14 @@
           </Properties>
         </Component>
         <Component class="javax.swing.JTextField" name="txtuser">
+          <Properties>
+            <Property name="name" type="java.lang.String" value="uname" noResource="true"/>
+          </Properties>
         </Component>
         <Component class="javax.swing.JPasswordField" name="txtpass">
+          <Properties>
+            <Property name="name" type="java.lang.String" value="pword" noResource="true"/>
+          </Properties>
         </Component>
       </SubComponents>
     </Container>
