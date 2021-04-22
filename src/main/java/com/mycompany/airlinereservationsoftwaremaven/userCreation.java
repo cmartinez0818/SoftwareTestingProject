@@ -280,11 +280,13 @@ public class userCreation extends javax.swing.JInternalFrame {
         return result;
     }
 
+    public boolean isValidID() {
+        return false;
+    }
+
     public boolean isValidPassword() {
-        boolean result = false;
         String regex = "^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{8,}$";
-
-
+        boolean result = txtpassword.getText().matches(regex);
         return result;
     }
 

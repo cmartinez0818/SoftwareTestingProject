@@ -60,9 +60,25 @@ public class userCreationTest {
         }
     }
 
-    //
+    @Test
+    public void testIsValidID() {
+        createUser.setID("UO008");
+        createUser.isValidID();
+    }
+
+    // Minimum eight characters, at least one letter and one number
+    //pos
     @Test
     public void testIsValidPassword() {
-        createUser.setPassword("");
+        createUser.setPassword("ThisIsOver8Char");
+        boolean result = createUser.isValidPassword();
+        assertTrue(result);
+    }
+
+    @Test
+    public void testIsValidPasswordNeg() {
+        createUser.setPassword("not8");
+        boolean result = createUser.isValidPassword();
+        assertFalse(result);
     }
 }
