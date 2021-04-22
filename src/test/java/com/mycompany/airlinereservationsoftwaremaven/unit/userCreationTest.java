@@ -34,10 +34,18 @@ public class userCreationTest {
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
+
     }
 
     @AfterAll
     public static void tearDownClass() {
+        try{
+            String setSt = "DELETE FROM user";
+            Statement setQuery = con.createStatement();
+            setQuery.executeUpdate(setSt);
+        }catch(SQLException e){
+            e.printStackTrace();
+        }
         createUser = null;
         try {
             con.close();
@@ -47,17 +55,31 @@ public class userCreationTest {
     }
 
     @Test
+    public void testUserCreationPerformance() {
+        createUser.autoID();
+        createUser.isUniqueID();
+        createUser.setFirstName("John");
+        createUser.setLastName("Peter");
+        createUser.setUsername("john");
+        createUser.setPassword("123");
+        JButton addUserBtn = createUser.getAddUserButton();
+        addUserBtn.doClick();
+
+        createUser.autoID();
+        createUser.setFirstName("Bill");
+        createUser.setLastName("Smith");
+        createUser.setUsername("BillSmith");
+        createUser.setPassword("BillSmith");
+        createUser.isValidPassword();
+        JButton addUserBtn2 = createUser.getAddUserButton();
+        addUserBtn2.doClick();
+    }
+
+    @Test
     public void testIsUniqueID() {
-        try{
-            createUser.setID("UO009");
-            boolean result = createUser.isUniqueID();
-            String setSt = "INSERT INTO user (id,firstname,lastname,username,password) VALUES('','fName', 'lName', 'testUser','123');";
-            Statement setQuery = con.createStatement();
-            setQuery.executeUpdate(setSt);
-            assertTrue(result);
-        }catch(SQLException e){
-            e.printStackTrace();
-        }
+        createUser.setID("UO009");
+        boolean result = createUser.isUniqueID();
+        assertTrue(result);
     }
 
     @Test

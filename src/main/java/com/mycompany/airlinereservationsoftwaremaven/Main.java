@@ -276,6 +276,28 @@ public class Main extends javax.swing.JFrame {
         });
     }
 
+    public javax.swing.JMenuItem getjMenuItem2() {
+        return jMenuItem2;
+    }
+    public javax.swing.JMenuItem getjMenuItem3() {
+        return jMenuItem3;
+    }
+    public javax.swing.JMenuItem getjMenuItem4() {
+        return jMenuItem4;
+    }
+    public javax.swing.JMenuItem getjMenuItem5() {
+        return jMenuItem5;
+    }
+    public javax.swing.JMenuItem getjMenuItem6() {
+        return jMenuItem6;
+    }
+    public javax.swing.JMenuItem getCustMenu() {
+        return addCustMenuItem;
+    }
+
+
+
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuItem addCustMenuItem;
     private javax.swing.JDesktopPane jDesktopPane1;

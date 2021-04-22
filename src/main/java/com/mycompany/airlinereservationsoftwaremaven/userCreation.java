@@ -7,8 +7,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
@@ -195,26 +193,9 @@ public class userCreation extends javax.swing.JInternalFrame {
 
 
             JOptionPane.showMessageDialog(null,"User Createdd.........");
-        } catch (ClassNotFoundException ex) {
-            Logger.getLogger(addflight.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (SQLException ex) {
+        } catch (ClassNotFoundException | SQLException ex) {
             Logger.getLogger(addflight.class.getName()).log(Level.SEVERE, null, ex);
         }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
     }//GEN-LAST:event_jButton1ActionPerformed
@@ -249,9 +230,7 @@ public class userCreation extends javax.swing.JInternalFrame {
 
 
 
-        } catch (ClassNotFoundException ex) {
-            Logger.getLogger(addCustomer.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (SQLException ex) {
+        } catch (ClassNotFoundException | SQLException ex) {
             Logger.getLogger(addCustomer.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
@@ -259,6 +238,9 @@ public class userCreation extends javax.swing.JInternalFrame {
     public void setID(String id){
         txtuserid.setText(id);
     }
+    public void setFirstName(String fn) {txtfirstname.setText(fn);}
+    public void setLastName(String ln) {txtlastname.setText(ln);}
+    public void setUsername(String usernm) {txtusername.setText(usernm);}
     public void setPassword(String password) {txtpassword.setText(password);}
 
 
@@ -284,14 +266,14 @@ public class userCreation extends javax.swing.JInternalFrame {
         return false;
     }
 
-    public boolean isValidPassword() {
+   public boolean isValidPassword() {
         String regex = "^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{8,}$";
         boolean result = txtpassword.getText().matches(regex);
         return result;
     }
 
 
-
+    public javax.swing.JButton getAddUserButton() {return jButton2;}
 
 
 

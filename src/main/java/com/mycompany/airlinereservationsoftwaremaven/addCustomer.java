@@ -370,9 +370,7 @@ public class addCustomer extends javax.swing.JInternalFrame {
                 id++;
                  txtid.setText("CS" + String.format("%03d", id));
             }
-        } catch (ClassNotFoundException ex) {
-            Logger.getLogger(addCustomer.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (SQLException ex) {
+        } catch (ClassNotFoundException | SQLException ex) {
             Logger.getLogger(addCustomer.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
@@ -528,9 +526,7 @@ public class addCustomer extends javax.swing.JInternalFrame {
             pst.setBytes(10, userimage);
             pst.executeUpdate();
             JOptionPane.showMessageDialog(null,"Registation Created........");  
-            }catch (ClassNotFoundException ex) {
-                    Logger.getLogger(addCustomer.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (SQLException ex) {
+            }catch (ClassNotFoundException | SQLException ex) {
                     Logger.getLogger(addCustomer.class.getName()).log(Level.SEVERE, null, ex);
             }
             unitMsg = "New customer added";

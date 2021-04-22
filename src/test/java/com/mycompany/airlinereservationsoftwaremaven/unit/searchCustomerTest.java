@@ -227,6 +227,12 @@ public class searchCustomerTest {
             Arguments.of((Object) new String[]{"2", inic, fn, fn, ippid, addr, dob, ipn, iblob})
         );
     }
+
+    @Test
+    public void testSearchCustNeg() {
+        searchCust.setCustIdTxt("CS010");
+        searchCust.getFindButton().doClick();
+    }
 }
 
 
