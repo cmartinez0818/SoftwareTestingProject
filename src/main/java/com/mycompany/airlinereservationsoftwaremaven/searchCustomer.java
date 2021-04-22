@@ -47,9 +47,7 @@ public class searchCustomer extends javax.swing.JInternalFrame {
             Class.forName("com.mysql.cj.jdbc.Driver");
             con = DriverManager.getConnection("jdbc:mysql://localhost/airline","root","");       
             initComponents();
-        } catch (ClassNotFoundException ex) {
-            Logger.getLogger(searchCustomer.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (SQLException ex) {
+        } catch (ClassNotFoundException | SQLException ex) {
             Logger.getLogger(searchCustomer.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
@@ -606,9 +604,7 @@ public class searchCustomer extends javax.swing.JInternalFrame {
         }
     }//GEN-LAST:event_r2StateChanged
 
-    public String getCustIdTxt(){
-        return txtcustid.getText();
-    }
+
     
     public void setCustIdTxt(String txt){
         txtcustid.setText(txt);
@@ -624,14 +620,6 @@ public class searchCustomer extends javax.swing.JInternalFrame {
     
     public String getTxtNic(){
         return txtnic.getText();
-    }
-    
-    public javax.swing.JRadioButton getMaleOpt(){
-        return r1;
-    }
-    
-    public javax.swing.JRadioButton getFemaleOpt(){
-        return r2;
     }
     
     public boolean isValidFirstName(){        
