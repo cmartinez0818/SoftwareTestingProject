@@ -454,6 +454,7 @@ public class addCustomer extends javax.swing.JInternalFrame {
         
     }//GEN-LAST:event_jButton1ActionPerformed
 
+
     private void addCustomerBtnActionPerformed(java.awt.event.ActionEvent evt) {                                               
                 
         String id = txtid.getText();

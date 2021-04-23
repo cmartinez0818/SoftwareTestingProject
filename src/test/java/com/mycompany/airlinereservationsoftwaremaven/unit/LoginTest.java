@@ -34,7 +34,7 @@ class LoginTest {
         try {
             String query3 = "INSERT INTO `user` (`id`, `firstname`, `lastname`, `username`, `password`) VALUES\n"
                 + "('John', 'Peter', 'john', '123'),\n"
-                + "('Bill', 'Billing', 'test', 'testpass', 9000, 2, '2019-06-15'),\n";
+                + "('Bill', 'Billing', 'test', 'testpass'),\n";
             Statement sta = con.createStatement();
             sta.executeUpdate(query3);
             sta.close();

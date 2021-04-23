@@ -192,7 +192,7 @@ public class userCreation extends javax.swing.JInternalFrame {
             pst.executeUpdate();
 
 
-            JOptionPane.showMessageDialog(null,"User Createdd.........");
+            JOptionPane.showMessageDialog(null,"User Created.........");
         } catch (ClassNotFoundException | SQLException ex) {
             Logger.getLogger(addflight.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -273,7 +273,7 @@ public class userCreation extends javax.swing.JInternalFrame {
     }
 
 
-    public javax.swing.JButton getAddUserButton() {return jButton2;}
+    public javax.swing.JButton getAddUserButton() {return jButton1;}
 
 
 
