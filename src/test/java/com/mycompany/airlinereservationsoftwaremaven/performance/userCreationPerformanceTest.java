@@ -36,6 +36,14 @@ public class userCreationPerformanceTest {
     createUser = null;
   }
 
+  /**
+   * Test Case ID: testUserCreationPerformance
+   * Purpose: Test create user
+   * Test setup: Input valid user info, then click add user button
+   * Test Strategy: Stub
+   * Input: Valid user input
+   * Expected state: Passes
+   */
   @Test
   public void testUserCreationPerformance() {
     createUser.autoID();

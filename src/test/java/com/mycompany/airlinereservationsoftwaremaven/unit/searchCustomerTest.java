@@ -30,7 +30,8 @@ public class searchCustomerTest {
     private static Main desktop;
     private static searchCustomer searchCust;
     private static Connection con;
-    
+
+    //Set up for all tests in file
     @BeforeAll
     public static void setUpClass(){
         desktop = new Main();
@@ -67,7 +68,8 @@ public class searchCustomerTest {
             ex.printStackTrace();
         }        
     }
-    
+
+    //Delete from customer when finished for future testing
     @AfterAll
     public static void tearDownClass(){
         searchCust = null;
@@ -80,13 +82,15 @@ public class searchCustomerTest {
             ex.printStackTrace();
         }
     }
-    
+
+    //Setup before each test
     @BeforeEach
     public void setUp(){
         desktop.getDesktop().add(searchCust);
         searchCust.show();
     }
-    
+
+    //Teardown after each
     @AfterEach
     public void tearDown(){
         desktop.getDesktop().remove(searchCust);
@@ -228,6 +232,14 @@ public class searchCustomerTest {
         );
     }
 
+    /**
+     * Test Case ID: testSearchCustNeg
+     * Purpose: To negative test searching for a customer by ID
+     * Test setup: Input hardcoded test values into SQL, then call ticketreport instance.
+     * Test Strategy: Input Validation, Bottom-up Integration
+     * Input: CS010
+     * Expected state: Passes, Posts Customer not Found
+     */
     @Test
     public void testSearchCustNeg() {
         searchCust.setCustIdTxt("CS010");

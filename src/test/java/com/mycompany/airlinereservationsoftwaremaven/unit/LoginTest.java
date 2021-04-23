@@ -19,6 +19,7 @@ class LoginTest {
     String [] args;
     static com.mycompany.airlinereservationsoftwaremaven.ticketService ticketService;
 
+    //Test setup before all tests
     @BeforeAll
     public static void setUpClass() {
         try{
@@ -57,7 +58,14 @@ class LoginTest {
         con.close();
     }
 
-
+    /**
+     * Test Case ID: LoginTest1
+     * Purpose: Test negative login input
+     * Test setup: Set user and password invalid, call login button
+     * Test Strategy: Equivalence class testing
+     * Input: invalid login
+     * Expected state: Passes, returns empty login
+     */
     @Test
     public void testIsPoplutatedPos() {
         login.main(args);
@@ -66,6 +74,14 @@ class LoginTest {
         assertEquals(true,!login.isEmpty());
     }
 
+    /**
+     * Test Case ID: LoginTest2
+     * Purpose: Test null login input
+     * Test setup: Set user and password invalid, call login button
+     * Test Strategy: Equivalence class testing
+     * Input: invalid login
+     * Expected state: Passes, returns empty login
+     */
     @Test
     public void testIsPopulatedNeg() {
         login.setuser("");
@@ -73,6 +89,14 @@ class LoginTest {
         assertEquals(true,login.isEmpty());
     }
 
+    /**
+     * Test Case ID: LoginTest3
+     * Purpose: Test valid login input
+     * Test setup: Set user and password invalid, call login button
+     * Test Strategy: Stub
+     * Input: valid login
+     * Expected state: Passes
+     */
     @Test
     public void testValidLoginPos() {
         login.setuser("john");
@@ -80,24 +104,51 @@ class LoginTest {
         login.jButton1.doClick();
     }
 
+    /**
+     * Test Case ID: LoginTest4
+     * Purpose: Test null login input
+     * Test setup: Set user and password invalid, call login button
+     * Test Strategy: Equivalence class testing
+     * Input: invalid login
+     * Expected state: Passes, returns empty login
+     */
     @Test
     public void testValidLoginNeg() {
         login.setuser("not");
         login.setpass("real");
         login.jButton1.doClick();
+        assertEquals(true,login.isEmpty());
     }
 
+    /**
+     * Test Case ID: LoginTest5
+     * Purpose: Test null login input
+     * Test setup: Set user and password invalid, call login button
+     * Test Strategy: Equivalence class testing
+     * Input: invalid login
+     * Expected state: Passes, returns empty login
+     */
     @Test
     public void testValidLoginNegUser() {
         login.setuser("");
         login.setpass("real");
         login.jButton1.doClick();
+        assertEquals(true,login.isEmpty());
     }
 
+    /**
+     * Test Case ID: LoginTest6
+     * Purpose: Test null login input
+     * Test setup: Set user and password invalid, call login button
+     * Test Strategy: Equivalence class testing
+     * Input: invalid login
+     * Expected state: Passes, returns empty login
+     */
     @Test
     public void testValidLoginNegPass() {
         login.setuser("not");
         login.setpass("");
         login.jButton1.doClick();
+        assertEquals(true,login.isEmpty());
     }
 }

@@ -22,7 +22,7 @@ public class userCreationTest {
 
     private static userCreation createUser;
     private static Connection con;
-
+//opens mysql connection
     @BeforeAll
     public static void setUpClass() {
         createUser = new userCreation();
@@ -37,6 +37,7 @@ public class userCreationTest {
 
     }
 
+//Deletes from mysql table user and closes connection
     @AfterAll
     public static void tearDownClass() {
         try{
@@ -53,7 +54,14 @@ public class userCreationTest {
             e.printStackTrace();
         }
     }
-
+    /**
+     * Test Case ID: testUserCreation
+     * Purpose: Test create user
+     * Test setup: Input valid user info, then click add user button
+     * Test Strategy: Stub
+     * Input: Valid user input
+     * Expected state: Passes
+     */
     @Test
     public void testUserCreationMethod() {
         createUser.autoID();
@@ -74,22 +82,43 @@ public class userCreationTest {
         JButton addUserBtn2 = createUser.getAddUserButton();
         addUserBtn2.doClick();
     }
-
+    /**
+     * Test Case ID: testUniqueID
+     * Purpose: Input validation for customerID
+     * Test setup: Set ID as unique unit
+     * Test Strategy: Equivalence class
+     * Input: UO009
+     * Expected state: Pass
+     */
     @Test
     public void testIsUniqueID() {
         createUser.setID("UO009");
         boolean result = createUser.isUniqueID();
         assertTrue(result);
     }
-
+    /**
+     * Test Case ID: testIsValidID
+     * Purpose: Input validation for password
+     * Test setup: Set password as invalid unit
+     * Test Strategy: Equivalence class
+     * Input: UO008
+     * Expected state: Pass
+     */
     @Test
     public void testIsValidID() {
         createUser.setID("UO008");
-        createUser.isValidID();
+        boolean result = createUser.isValidID();
+        assertTrue(result);
     }
 
-    // Minimum eight characters, at least one letter and one number
-    //pos
+    /**
+     * Test Case ID: testIsValidPassword
+     * Purpose: Input validation for password
+     * Test setup: Set password as valid unit
+     * Test Strategy: Equivalence class
+     * Input: ThisIsOver8Char
+     * Expected state: Pass
+     */
     @Test
     public void testIsValidPassword() {
         createUser.setPassword("ThisIsOver8Char");
@@ -97,6 +126,14 @@ public class userCreationTest {
         assertTrue(result);
     }
 
+    /**
+     * Test Case ID: testIsValidPassword
+     * Purpose: Input validation for password
+     * Test setup: Set password as invalid unit
+     * Test Strategy: Equivalence class
+     * Input: Password = not8
+     * Expected state: true
+     */
     @Test
     public void testIsValidPasswordNeg() {
         createUser.setPassword("not8");

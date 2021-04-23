@@ -108,18 +108,13 @@ public class ticketTest {
   }
 
   /**
-   * Test Case ID:
-   * Requirement:
-   *
-   * Purpose:
-   *
-   * Test setup:
-   * Test Strategy:
-   * Partitions:
-   * -
-   * -
-   * Input:
-   * Expected state:
+   * Test Case ID: testSearchByID
+   * Purpose: Test that ticket.getSeachCustInfoButton retrieves
+   * mysql data from database
+   * Test setup: Set CID to CS001, click button
+   * Test Strategy: Equivalence testing
+   * Input: CS001
+   * Expected state: Pass
    *
    */
   @Test
@@ -134,6 +129,16 @@ public class ticketTest {
     assertEquals("123456789", ticket.getPsp());
   }
 
+  /**
+   * Test Case ID: testSearchByID
+   * Purpose: Test that ticket.getSeachCustInfoButton retrieves
+   * only valid mysql data from database
+   * Test setup: Set CID to CS008, click button
+   * Test Strategy: Negative Equivalence testing
+   * Input: CS008
+   * Expected state: Record not Found, Pass
+   *
+   */
   @Test
   public void testSearchCustByIdNotFound() {
     ticket.setCID("CS008");
@@ -144,19 +149,15 @@ public class ticketTest {
     assertEquals(msg, ticket.errMsg);
   }
 
+
   /**
-   * Test Case ID:
-   * Requirement:
-   *
-   * Purpose:
-   *
-   * Test setup:
-   * Test Strategy:
-   * Partitions:
-   * -
-   * -
-   * Input:
-   * Expected state:
+   * Test Case ID: testTicketInfo
+   * Purpose: Test that ticket.getTicketSearch Button retrieves
+   * corresponding mysql data from database
+   * Test setup: Set Source and Destination to India, click search
+   * Test Strategy: Stub
+   * Input: India
+   * Expected state: Pass
    *
    */
   @Test
@@ -171,18 +172,15 @@ public class ticketTest {
   }
 
   /**
-   * Test Case ID:
+   * Test Case ID: testBookTicket-001
    * Requirement:
    *
-   * Purpose:
-   *
-   * Test setup:
-   * Test Strategy:
-   * Partitions:
-   * -
-   * -
-   * Input:
-   * Expected state:
+   * Purpose: Test getUpdateButton adds ticket to mysql
+   * Test setup: Manually set all input values to make dummy versions
+   * of code dependencies
+   * Test Strategy: Stub
+   * Input: Fill out ticket with valid inputs
+   * Expected state: Pass, Dialog box stating ticket added to database
    *
    */
   @Test
@@ -202,6 +200,18 @@ public class ticketTest {
 
   }
 
+  /**
+   * Test Case ID: testBookTicket-002
+   * Requirement:
+   *
+   * Purpose: Test getUpdateButton adds ticket to mysql
+   * Test setup: Manually set all input values to make dummy versions
+   * of code dependencies
+   * Test Strategy: Stub
+   * Input: Fill out ticket with valid inputs
+   * Expected state: Pass, Dialog box stating ticket added to database
+   *
+   */
   @Test
   public void testBookTicketAutoID() {
     ticket.setCID("CS001");
@@ -216,7 +226,6 @@ public class ticketTest {
     JButton bookBtn = ticket.getUpdateButton();
     System.out.println(bookBtn);
     bookBtn.doClick();
-
   }
 
 

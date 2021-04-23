@@ -20,6 +20,7 @@ public class ticketPerformanceTest {
   private static ticket ticket;
   private static Connection con;
 
+  //Insert into customer so tests can retrieve necessary data.
   @BeforeAll
   public static void setUpClass() {
 
@@ -84,6 +85,16 @@ public class ticketPerformanceTest {
     ticket.errMsg = "";
   }
 
+  /**
+   * Test Case ID: testBookTicket-001
+   * Purpose: Test getUpdateButton adds ticket to mysql
+   * Test setup: Manually set all input values to make dummy versions
+   * of code dependencies
+   * Test Strategy: Stub
+   * Input: Fill out ticket with valid inputs
+   * Expected state: Pass, Dialog box stating ticket added to database
+   *
+   */
   @Test
   public void testTicketBookingPerformancePass(){
     ticket.setCID("CS001");
@@ -125,6 +136,21 @@ public class ticketPerformanceTest {
   tickBtn.doClick();
 }
 
+  /**
+   * Test Case ID: UTest-isValidSearchCustID
+   * Requirement: REQ-8 The account’s passport ID input field in the Airline
+   * Reservation Software customer ID shall accept only alphanumeric characters.
+   * Purpose: To test that the input passed does not contain invalid characters.
+   * Test setup: set the search customer object passport ID member field using
+   * method setCID(). 1 test case is used as input.
+   * Test Strategy: Equivalence class testing.
+   *
+   *
+   * All inputs:
+   *  - partition input value: "CS00#"
+   * Input: call method isValidCID()
+   * Expected output: method isValidCID() returns false.
+   */
 @Test
   public void testTicketBookingPerformanceFail(){
   ticket.setCID("CS00#");
@@ -141,5 +167,6 @@ public class ticketPerformanceTest {
   String msg2 = "Record not Found";
   assertEquals(msg2, ticket.errMsg);
 }
+
 
 }

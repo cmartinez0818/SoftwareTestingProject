@@ -60,7 +60,20 @@ public class addFlightTest {
   }
 
 
-
+  /**
+   * Test Case ID: UTest-validateFlightName1
+   * Requirement: REQ-2 The account’s name input fields in the Airline
+   * Reservation Software shall accept only alpha characters.
+   * Purpose: To test that the input passed is valid input, ensuring that the
+   * input only contains alphabetic characters.
+   * Test setup: An object of the addCustomer class is created with the text
+   * value of member field txtfirstname set to "JetBlue".
+   * Test Strategy: Equivalence class testing
+   *  Partition input space as follows:
+   *  - character classes in input: [a-zA-Z], [\.](any character)
+   * Input: set flight name to JetBlue
+   * Expected output: method validateFlightName() returns true.
+   */
   @Test
   public void testValidateAutoID() {
     addFlight.setTxtFlightName("Delta");
@@ -74,6 +87,20 @@ public class addFlightTest {
     bookBtn.doClick();
   }
 
+  /**
+   * Test Case ID: UTest-validateFlightName2
+   * Requirement: REQ-2 The account’s name input fields in the Airline
+   * Reservation Software shall accept only alpha characters.
+   * Purpose: To test that the input passed is valid input, ensuring that the
+   * input only contains alphabetic characters.
+   * Test setup: An object of the addCustomer class is created with the text
+   * value of member field txtfirstname set to "JetBlue".
+   * Test Strategy: Equivalence class testing
+   *  Partition input space as follows:
+   *  - character classes in input: [a-zA-Z], [\.](any character)
+   * Input: set flight name to JetBlue
+   * Expected output: method validateFlightName() returns true.
+   */
   @Test
   public void testValidateNextEntries() {
     addFlight.autoID();
@@ -89,7 +116,7 @@ public class addFlightTest {
   }
 
   /**
-   * Test Case ID: UTest-validateFlightName
+   * Test Case ID: UTest-validateFlightName3
    * Requirement: REQ-2 The account’s name input fields in the Airline
    * Reservation Software shall accept only alpha characters.
    * Purpose: To test that the input passed is valid input, ensuring that the
@@ -113,7 +140,7 @@ public class addFlightTest {
 
 
   /**
-   * Test Case ID: UTest-validateFlightName
+   * Test Case ID: UTest-validateFlightName4
    * Requirement: REQ-2 The account’s name input fields in the Airline
    * Reservation Software shall accept only alpha characters.
    * Purpose: To test that the invalid input passed is returned as invalid
@@ -142,7 +169,7 @@ public class addFlightTest {
   }
 
   /**
-   * Test Case ID: UTest-validateFlightName
+   * Test Case ID: UTest-validateFlightName5
    * Requirement: REQ-2 The account’s name input fields in the Airline
    * Reservation Software shall accept only alpha characters.
    * Purpose: To test that the input passed is valid input, ensuring that the
@@ -165,7 +192,7 @@ public class addFlightTest {
   }
 
   /**
-   * Test Case ID: UTest-validateFlightName
+   * Test Case ID: UTest-validateFlightName6
    * Requirement: REQ-2 The account’s name input fields in the Airline
    * Reservation Software shall accept only alpha characters.
    * Purpose: To test that the input passed is valid input, ensuring that the
@@ -193,7 +220,7 @@ public class addFlightTest {
   }
 
   /**
-   * Test Case ID: UTest-validateFlightName
+   * Test Case ID: UTest-validateFlightName7
    * Requirement: REQ-2 The account’s name input fields in the Airline
    * Reservation Software shall accept only alpha characters.
    * Purpose: To test that the input passed is valid input, ensuring that the
@@ -216,7 +243,7 @@ public class addFlightTest {
   }
 
   /**
-   * Test Case ID: UTest-validateFlightName
+   * Test Case ID: UTest-validateFlightName8
    * Requirement: REQ-2 The account’s name input fields in the Airline
    * Reservation Software shall accept only alpha characters.
    * Purpose: To test that the input passed is valid input, ensuring that the

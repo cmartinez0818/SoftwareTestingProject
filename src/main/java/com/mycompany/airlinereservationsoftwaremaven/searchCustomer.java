@@ -40,7 +40,7 @@ public class searchCustomer extends javax.swing.JInternalFrame {
     public searchCustomer(){
         this(null);
     }
-    // db connect
+    
     public searchCustomer(SearchCustomerService scs) {
         service = scs;
         try {
@@ -51,7 +51,7 @@ public class searchCustomer extends javax.swing.JInternalFrame {
             Logger.getLogger(searchCustomer.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    // create search customer for test methods using values passed in
+    
     public void fillSearchCustomer(String id, String fn, String ln, String nic, String ppid, String addr, String dob, String gender, String phone, byte[] blob) {
         txtcustid.setText(id);
         txtfirstname.setText(fn);
@@ -444,52 +444,44 @@ public class searchCustomer extends javax.swing.JInternalFrame {
          
         try {
             boolean allIsUpdated = true;
-            List<PreparedStatement> stmts = new ArrayList<>(); // store statements to execute
+            List<PreparedStatement> stmts = new ArrayList<>();
             if(isValidFirstName()){
-              // add to first name update to ArrayList
                 PreparedStatement pstFN = con.prepareStatement("update customer set firstname = ? where id = ?");
                 pstFN.setString(1, firstname);
                 stmts.add(pstFN);
             }else allIsUpdated = false;
             if(isValidLastName()){
-              // add to last name update to ArrayList
                 PreparedStatement pstFN = con.prepareStatement("update customer set lastname = ? where id = ?");
                 pstFN.setString(1, lastname);
                 stmts.add(pstFN);
             }else allIsUpdated = false;
             if(isValidNIC()){
                 if(isUniqueNIC()){
-                  // add to nic update to ArrayList
                     PreparedStatement pstFN = con.prepareStatement("update customer set nic = ? where id = ?");
                     pstFN.setString(1, nic);
                     stmts.add(pstFN);
                 }else allIsUpdated = false;              
             }else allIsUpdated = false;
             if(isValidPPID()){
-              // add to passport update to ArrayList
                 PreparedStatement pstFN = con.prepareStatement("update customer set passport = ? where id = ?");
                 pstFN.setString(1, passport);
                 stmts.add(pstFN);
             }else allIsUpdated = false;
             if(isValidPhoneNo()){
-              // add to phone number to ArrayList
                 PreparedStatement pstFN = con.prepareStatement("update customer set contact = ? where id = ?");
                 pstFN.setString(1, contact);
                 stmts.add(pstFN);
             }else allIsUpdated = false;
             if(!address.isEmpty()){
-              // add to address update to ArrayList
                 PreparedStatement pstFN = con.prepareStatement("update customer set address = ? where id = ?");
                 pstFN.setString(1, address);
                 stmts.add(pstFN);
             }else allIsUpdated = false;
             if(!txtdob.isEmpty()){
-              // add to DOB update to ArrayList
                 PreparedStatement pstFN = con.prepareStatement("update customer set dob = ? where id = ?");
                 pstFN.setString(1, txtdob);
                 stmts.add(pstFN);
             }else allIsUpdated = false;
-          // add to gender update to ArrayList
             if((r1.isSelected()&&!r2.isSelected())||(!r1.isSelected()&&r2.isSelected())){
                 String gend;
                 if(r1.isSelected()){
@@ -501,7 +493,6 @@ public class searchCustomer extends javax.swing.JInternalFrame {
                 pstFN.setString(1, gend);
                 stmts.add(pstFN);
             }else allIsUpdated = false;
-          // add to image update to ArrayList
             if(userimage.length!=0){
                 PreparedStatement pstFN = con.prepareStatement("update customer set photo = ? where id = ?");
                 pstFN.setBytes(1, userimage);
@@ -513,7 +504,6 @@ public class searchCustomer extends javax.swing.JInternalFrame {
                 psmt.close();
                 execUpdateCalled();
             }  
-          // check to see if all fields were done
             String msg = allIsUpdated ? "Registration updated." : "Not all fields were updated.";
             unitUpdateMsg = msg;            
             intUpdateMsg = showRegistrationUpdatedMsg(msg);
@@ -662,29 +652,29 @@ public class searchCustomer extends javax.swing.JInternalFrame {
         }        
         return result;
     }
-    // does nic match 10 number pattern
+    
     public boolean isValidNIC(){
         String regex = "^\\d{10}$";
         boolean valid = Pattern.matches(regex, txtnic.getText());
         return valid;
     }
-    // setter for nic
+    
     public void setNIC(String nic){
         txtnic.setText(nic);
     }
-    // does passport match only numbers and letters
+    
     public boolean isValidPPID(){
         String regex = "^[a-zA-Z0-9[<]]+$";
         boolean result = Pattern.matches(regex, txtpassport.getText());
         return result;
     }
-    // is phone number valid in digits and only digits
+    
     public boolean isValidPhoneNo(){
         String regex = "^[0-9]+$";
         boolean result = Pattern.matches(regex, txtcontact.getText());
         return result;
     }
-    // getter for DOB
+    
     public String getDoB(){
         DateFormat da = new SimpleDateFormat("yyyy-MM-dd");
         if(dobField.getDate()==null){
@@ -698,7 +688,7 @@ public class searchCustomer extends javax.swing.JInternalFrame {
         //JOptionPane.showMessageDialog(null,msg);
         //return msg;
     }    
-    // display message when called
+    
     public void showCustNotFoundMsg() {
         String msg = "Customer not found.";
         findState = msg;

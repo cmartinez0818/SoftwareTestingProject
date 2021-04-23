@@ -25,6 +25,7 @@ public class ticketReportPerformanceTest {
   static com.mycompany.airlinereservationsoftwaremaven.ticketService ticketService;
   static Main desktop;
 
+  //Setup before all classes
   @BeforeAll
   public static void setUpClass() {
     testTicket = new ticket();
@@ -93,8 +94,6 @@ public class ticketReportPerformanceTest {
 
   /**
    * Test Case ID: TicketReportPerformanceTest-001
-   * Requirement: REQ-
-   *
    * Purpose: To test that the ticket report properly interacts with the database, and properly
    * formats and reports the table of tickets from the database.
    * Test setup: Input hardcoded test values into SQL, then call ticketreport instance.

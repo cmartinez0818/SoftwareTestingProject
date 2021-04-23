@@ -23,6 +23,7 @@ public class ticketReportTest {
   static com.mycompany.airlinereservationsoftwaremaven.ticketService ticketService;
   static Main desktop;
 
+  //Setup common to all tests
   @BeforeAll
   public static void setUpClass() {
   try{
@@ -35,7 +36,7 @@ public class ticketReportTest {
   } catch (ClassNotFoundException e) {
   e.printStackTrace();
   }
-  try {
+  try { //Insert test values
   String query3 = "INSERT INTO `ticket` (`id`, `flightid`, `custid`, `class`, `price`, `seats`, `date`) VALUES\n"
   + "('TO001', 'FO003', 'CS001', 'Economy', 9000, 1, '2019-06-15'),\n"
   + "('TO002', 'FO003', 'CS001', 'Economy', 9000, 2, '2019-06-15'),\n"
@@ -48,6 +49,7 @@ public class ticketReportTest {
   }
   }
 
+  //Delete mysql data from ticket table for future tests
   @AfterAll
   public static void tearDownClass() throws SQLException {
     testTicket = null;
@@ -62,10 +64,9 @@ public class ticketReportTest {
     con.close();
   }
 
-
+  //create mocks, which ticketReport is dependent on.
   @BeforeEach
   public void setUp(){
-    //create mocks, which searchCustomer is dependent on.
     ticketService  = Mockito.mock(com.mycompany.airlinereservationsoftwaremaven.ticketService.class);
     desktop = new Main();
     testTicket = new ticket();
@@ -73,9 +74,10 @@ public class ticketReportTest {
     testTicket.setVisible(true);
   }
 
+  //teardown all mocks
   @AfterEach
   public void tearDown() {
-    //create mocks, which searchCustomer is dependent on.
+
     ticketService  = null;
     desktop.getDesktop().remove(testTicket);
     testTicket = null;

@@ -59,7 +59,20 @@ public class addFlightPerformanceTest {
     }
   }
 
-
+  /**
+   * Test Case ID: UTest-validateFlightName1
+   * Requirement: REQ-2 The account’s name input fields in the Airline
+   * Reservation Software shall accept only alpha characters.
+   * Purpose: To test that the input passed is valid input, ensuring that the
+   * input only contains alphabetic characters.
+   * Test setup: An object of the addCustomer class is created with the text
+   * value of member field txtfirstname set to "JetBlue".
+   * Test Strategy: Equivalence class testing
+   *  Partition input space as follows:
+   *  - character classes in input: [a-zA-Z], [\.](any character)
+   * Input: set flight name to JetBlue
+   * Expected output: method validateFlightName() returns true.
+   */
   @Test
   public void testAddFlightPerformancePass() {
     addFlight.setTxtFlightName("Delta");
@@ -85,6 +98,17 @@ public class addFlightPerformanceTest {
 
   }
 
+  /**
+   * Test Case ID: UTest-validateFlightName2
+   * Requirement: REQ-2 The account’s name input fields in the Airline
+   * Reservation Software shall accept only alpha characters.
+   * Purpose: To test that the input passed is invalid input.
+   * Test setup: Value of member field txtflightname set to "JetBlu3".
+   * Other invalid inputs
+   * Test Strategy: Equivalence class testing
+   * Input: set flight name to JetBlu3, invalid input
+   * Expected output: method validation return false
+   */
   @Test
   public void testAddFlightPerformanceFail() {
     addFlight.setTxtFlightName("JetBlu3");
