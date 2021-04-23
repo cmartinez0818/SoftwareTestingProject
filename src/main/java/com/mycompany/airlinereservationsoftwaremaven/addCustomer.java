@@ -349,7 +349,7 @@ public class addCustomer extends javax.swing.JInternalFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    
+    //  increment ID one past the highest found in table
     public void autoID()
     {
         try {
@@ -375,7 +375,7 @@ public class addCustomer extends javax.swing.JInternalFrame {
         }
     }
     
-    
+    // create customer for use in test methods using parameters passed in
     public void fillAddCustomer(String fn, String ln, String nic, String ppid, String addr, String dob, String gender, String phone, byte[] blob) {
         txtfirstname.setText(fn);
         txtlastname.setText(ln);
@@ -455,6 +455,7 @@ public class addCustomer extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_jButton1ActionPerformed
 
 
+    // check to see if all values input to customer created are valid and ones are unique are not used more than once
     private void addCustomerBtnActionPerformed(java.awt.event.ActionEvent evt) {                                               
                 
         String id = txtid.getText();
@@ -550,18 +551,19 @@ public class addCustomer extends javax.swing.JInternalFrame {
         r1.setSelected(false);
     }//GEN-LAST:event_r2ActionPerformed
 
+    // check to see if first name has only valid characters and no special expect for -
     public boolean isValidFirstName(){        
         String regex = "^[a-zA-Z[-]]{1,64}$";
         boolean valid = Pattern.matches(regex, txtfirstname.getText());        
         return valid;
     }
-    
+    // same as last but for last name
     public boolean isValidLastName(){        
         String regex = "^[a-zA-Z[-]]{1,64}$";
         boolean valid = Pattern.matches(regex, txtlastname.getText());        
         return valid;
     }
-    
+    // cehck to see if nic has been used before
     public boolean isUniqueNIC(){
         boolean result = false;
         String query = "Select count(nic) as ct from Customer where nic=?";
@@ -579,25 +581,26 @@ public class addCustomer extends javax.swing.JInternalFrame {
         }        
         return result;
     }
-    
+    // check if nic is valid in format
     public boolean isValidNIC(){
         String regex = "^\\d{10}$";
         boolean valid = Pattern.matches(regex, txtnic.getText());
         return valid;
     }
-    
+    // check if ppid is valid in format
     public boolean isValidPPID(){
         String regex = "^[a-zA-Z0-9[<]]+$";
         boolean result = Pattern.matches(regex, txtpassport.getText());
         return result;
     }
-    
+    // check if phone number is valid in format
     public boolean isValidPhoneNo(){
         String regex = "^[0-9]+$";
         boolean result = Pattern.matches(regex, txtcontact.getText());
         return result;
     }
     
+    // check if ppid is valid in format
     public String getDate(){
         DateFormat da = new SimpleDateFormat("yyyy-MM-dd");
         if(dobField.getDate()==null){
@@ -605,23 +608,23 @@ public class addCustomer extends javax.swing.JInternalFrame {
         }
         return da.format(dobField.getDate());
     }
-    
+    // setter for first name
     public void setTxtFirstName(String txt){
         txtfirstname.setText(txt);
     }
-    
+    // setter for nic
     public void setNIC(String nic){
         txtnic.setText(nic);
     }
-    
+    // setter for ppid
     public void setPPID(String ppid) {
         txtpassport.setText(ppid);
     }
-    
+    // setter for phone number
     public void setPhoneNo(String pn) {
         txtcontact.setText(pn);
     }
-    
+    // getter for id
     public String getTxtId(){
         return txtid.getText();
     }    
