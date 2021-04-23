@@ -130,8 +130,10 @@ public class Login extends javax.swing.JFrame {
     public void setuser(String user) {
         txtuser.setText(user);
     }
+    // setter for test method
     public void setpass(String pass) { txtpass.setText(pass);}
 
+    // check to see if empty. Displays messages if empty
     public boolean isEmpty() {
         if(txtuser.getText().isEmpty() ||  txtpass.getText().isEmpty())
         {
@@ -147,6 +149,7 @@ public class Login extends javax.swing.JFrame {
         String password = txtpass.getText();
 
 
+        // if populated continue
         if (!isEmpty())
         {
             try {
