@@ -55,9 +55,9 @@ public class userCreationTest {
     }
 
     @Test
-    public void testUserCreationPerformance() {
+    public void testUserCreationMethod() {
         createUser.autoID();
-        createUser.isUniqueID();
+        //createUser.isUniqueID();
         createUser.setFirstName("John");
         createUser.setLastName("Peter");
         createUser.setUsername("john");
@@ -70,7 +70,7 @@ public class userCreationTest {
         createUser.setLastName("Smith");
         createUser.setUsername("BillSmith");
         createUser.setPassword("BillSmith");
-        createUser.isValidPassword();
+        //createUser.isValidPassword();
         JButton addUserBtn2 = createUser.getAddUserButton();
         addUserBtn2.doClick();
     }
