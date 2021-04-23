@@ -94,8 +94,7 @@ PreparedStatement pst;
 
     public static Vector testVector = new Vector();
 
-
-
+// load data from tickets to generate report
     public void LoadData()
     {
         try {
