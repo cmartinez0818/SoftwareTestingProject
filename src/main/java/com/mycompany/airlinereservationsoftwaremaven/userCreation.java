@@ -206,6 +206,7 @@ public class userCreation extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_jButton2ActionPerformed
 
 
+    // this will incremet a counter for the the ID starting with teh last highest found in the table
     public void autoID()
     {
         try {
@@ -235,6 +236,7 @@ public class userCreation extends javax.swing.JInternalFrame {
         }
     }
 
+    //setter for test method
     public void setID(String id){
         txtuserid.setText(id);
     }
@@ -244,6 +246,7 @@ public class userCreation extends javax.swing.JInternalFrame {
     public void setPassword(String password) {txtpassword.setText(password);}
 
 
+    // loads any user with the same ID, if it is more than 0, it flips the boolean
     public boolean isUniqueID(){
         boolean result = false;
         String query = "Select count(id) as ct from user where id=?";
@@ -266,6 +269,7 @@ public class userCreation extends javax.swing.JInternalFrame {
         return false;
     }
 
+    // at least 8 characters with includinig a number
    public boolean isValidPassword() {
         String regex = "^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{8,}$";
         boolean result = txtpassword.getText().matches(regex);
