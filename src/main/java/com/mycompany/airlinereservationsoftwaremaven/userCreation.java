@@ -205,7 +205,7 @@ public class userCreation extends javax.swing.JInternalFrame {
         this.hide();
     }//GEN-LAST:event_jButton2ActionPerformed
 
-
+// increment id one higher than highest found
     public void autoID()
     {
         try {
@@ -234,7 +234,7 @@ public class userCreation extends javax.swing.JInternalFrame {
             Logger.getLogger(addCustomer.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-
+// setter for id
     public void setID(String id){
         txtuserid.setText(id);
     }
@@ -243,7 +243,7 @@ public class userCreation extends javax.swing.JInternalFrame {
     public void setUsername(String usernm) {txtusername.setText(usernm);}
     public void setPassword(String password) {txtpassword.setText(password);}
 
-
+// check id id is in table
     public boolean isUniqueID(){
         boolean result = false;
         String query = "Select count(id) as ct from user where id=?";
@@ -261,11 +261,11 @@ public class userCreation extends javax.swing.JInternalFrame {
         }
         return result;
     }
-
+// check if id is valid
     public boolean isValidID() {
         return false;
     }
-
+// chekc if password is at least 8 characters and is a combination of numbers and letters only
    public boolean isValidPassword() {
         String regex = "^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{8,}$";
         boolean result = txtpassword.getText().matches(regex);
