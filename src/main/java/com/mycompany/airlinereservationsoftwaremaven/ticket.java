@@ -480,6 +480,7 @@ public class ticket extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_jButton3ActionPerformed
 
 
+    // increment flight ID one higher than highest found
     public void autoID()
     {
         try {
@@ -518,6 +519,7 @@ public class ticket extends javax.swing.JInternalFrame {
         String id = txtcustid.getText();
 
 
+        // only continue if the flight id is valid
         if(isValidSearchCustID()) {
             try {
                 Class.forName("com.mysql.jdbc.Driver");
@@ -639,49 +641,59 @@ public class ticket extends javax.swing.JInternalFrame {
         boolean result = Pattern.matches(regex, txtcustid.getText());
         return result;
     }
-
+    // setter for flight id
     public void setFLTID(String fltid) {
         flightno.setText(fltid);
     }
+    // getter for flight id
     public String getFLTID() {
         flightno.getText();
         return flightno.getText();
     }
-
+    //getter for passport
     public String getPsp() {
         txtpassport.getText();
         return txtpassport.getText();
     }
+    // getter for first name
     public String getCustFirstName() {
         return txtfirstname.getText();
     }
+    // getter for last name
     public String getCustLastName() {
         return txtlastname.getText();
     }
-
+    // setter for customer id
     public void setCID(String cid) {
         txtcustid.setText(cid);
     }
+    // setter for customer first name
     public void setTicketFirstName(String txt){
         txtfirstname.setText(txt);
     }
+    // setter for customer last name
     public void setTicketLastName(String last) { txtlastname.setText(last);}
+    // setter for flight destination
     public void setDestination(String dest) {
         txtdepart.setToolTipText(dest);
     }
+    // setter for flight source
     public void setSource(String sour) {
         txtsource.setToolTipText(sour);
     }
+    // setter for flight seats
     public void setSeats(String seats) {
         txtseats.setToolTipText(seats);
     }
+    // setter for ticket price
     public void setPrice(String price) {
         txtprice.setText(price);
     }
+    // setter for flight id
     public void setFLID(String FID) {
         flightno.setText(FID);
     }
-
+    // getter for total cost
     public String getTotal() {
         return txttotal.getText();
     }
